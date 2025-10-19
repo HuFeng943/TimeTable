@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "TimeTable"
 include(":mobile")
 include(":wear")
+include(":shared")
