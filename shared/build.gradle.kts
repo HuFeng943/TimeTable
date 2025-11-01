@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.jvm)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
+
 }
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -10,8 +11,10 @@ java {
 }
 kotlin {
     compilerOptions {
-        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+        freeCompilerArgs.add("-opt-in=kotlin.time.ExperimentalTime")
     }
+
 }
 
 dependencies {
