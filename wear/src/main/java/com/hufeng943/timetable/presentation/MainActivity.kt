@@ -1,6 +1,7 @@
 package com.hufeng943.timetable.presentation
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
@@ -13,6 +14,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import androidx.profileinstaller.ProfileInstaller
+import androidx.profileinstaller.ProfileVerifier
 import androidx.wear.compose.foundation.pager.HorizontalPager
 import androidx.wear.compose.foundation.pager.rememberPagerState
 import com.hufeng943.timetable.presentation.theme.TimeTableTheme
@@ -39,6 +41,7 @@ class MainActivity : ComponentActivity() {
                 HorizontalPager(
                     modifier = Modifier.fillMaxSize(),
                     state = rememberPagerState { 10 },
+
                 ) { page -> // page 是当前页面的索引 (0 到 9)
                     when(page) {
                         0 -> TimetableScreen(courses = courses, title = "哈吉米南北绿豆！")

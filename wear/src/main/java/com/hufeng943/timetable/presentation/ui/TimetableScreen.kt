@@ -59,52 +59,45 @@ fun TimetableScreen(
     }
 }
 
+object TimeFormatters {
+    val formatter24h: DateTimeFormatter by lazy {
+        DateTimeFormatter.ofPattern("HH:mm", Locale.getDefault())
+    }
+    val formatter12h: DateTimeFormatter by lazy {
+        DateTimeFormatter.ofPattern("h:mm", Locale.getDefault())
+    }
+    val amPmFormatter: DateTimeFormatter by lazy {
+        DateTimeFormatter.ofPattern("a", Locale.US)
+    }
+}
+
+
 @Composable
 fun TextTime(time: LocalTime) {
     val context = LocalContext.current
-    val is24Hour = remember { DateFormat.is24HourFormat(context) }  // Locale固定，不重查
-    val localDateTime = remember(time) { java.time.LocalTime.of(time.hour, time.minute) }  // 缓存转换
-    val pattern = if (is24Hour) "HH:mm" else "h:mm"
-    val formatter1 = remember(pattern) {  // 缓存formatter
-        DateTimeFormatter.ofPattern(pattern, Locale.getDefault())
+    val is24Hour = remember { DateFormat.is24HourFormat(context) }
+    val localTime = remember(time) { java.time.LocalTime.of(time.hour, time.minute) }
+
+    val timeStr = remember(localTime, is24Hour) {
+        if (is24Hour) TimeFormatters.formatter24h.format(localTime)
+        else TimeFormatters.formatter12h.format(localTime)
     }
 
-    val timeStr = remember(formatter1, localDateTime) { formatter1.format(localDateTime) }  // 缓存格式字符串
-
-    val aTextStyle = MaterialTheme.typography.labelSmall.copy(
-        fontSize = 9.sp,
-        lineHeight = 9.sp
-    )
-
     if (is24Hour) {
-        Text(
-            text = timeStr,
-            style = MaterialTheme.typography.labelMedium
-        )
+        Text(text = timeStr, style = MaterialTheme.typography.labelMedium)
     } else {
-        val formatter2 = remember {  // 缓存AM/PM formatter
-            DateTimeFormatter.ofPattern("a", Locale.US)
-        }
-        val aStr = remember(formatter2, localDateTime) {
-            formatter2.format(localDateTime)
-        }  // 缓存AM/PM
-
+        val amPm = remember(localTime) { TimeFormatters.amPmFormatter.format(localTime) }
         Column(
             modifier = Modifier.width(IntrinsicSize.Min),
             horizontalAlignment = Alignment.End,
             verticalArrangement = Arrangement.Top
         ) {
-            Text(
-                text = timeStr,
-                style = MaterialTheme.typography.labelMedium
-            )
-            Text(
-                text = aStr,
-                style = aTextStyle
-            )
+            Text(text = timeStr, style = MaterialTheme.typography.labelMedium)
+            Text(text = amPm, style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp, lineHeight = 9.sp))
         }
     }
 }
+
 
 @Composable
 fun TimeTableCard(course: CourseUi){
