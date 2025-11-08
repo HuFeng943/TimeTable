@@ -78,11 +78,19 @@ data class TimeTable(
 ) {
     init {
         require(semesterName.isNotBlank()) { "Semester name cannot be blank." }
-        require(semesterStart < (semesterEnd ?: LocalDate(9999, 12, 31))) { "Invalid semester dates." }
+        require(
+            semesterStart < (semesterEnd ?: LocalDate(
+                9999,
+                12,
+                31
+            ))
+        ) { "Invalid semester dates." }
     }
+
     // 取课表开始当周的周一
     val semesterStartMonday: LocalDate by lazy {
-        val offsetDays = (semesterStart.dayOfWeek.isoDayNumber - DayOfWeek.MONDAY.isoDayNumber).mod(7)
+        val offsetDays =
+            (semesterStart.dayOfWeek.isoDayNumber - DayOfWeek.MONDAY.isoDayNumber).mod(7)
         semesterStart.minus(offsetDays.toLong(), DateTimeUnit.DAY)
     }
 }
@@ -95,8 +103,9 @@ data class CourseUi(
     val color: Int,
     val location: String?,
     val teacher: String?,
-    val recurrence: WeekPattern
-    ){
+    val recurrence: WeekPattern,
+    val periodRange: Int
+) {
     init {
         require(name.isNotBlank()) { "CourseUI name cannot be blank." }
         require(timeSlot.endTime > timeSlot.startTime) { "End time must be after start time." }
@@ -110,7 +119,8 @@ private fun generateCourseUiId(courseId: Long, slot: TimeSlot): Long =
             (slot.dayOfWeek.isoDayNumber.toLong() shl 11) or
             (slot.startTime.hour.toLong() shl 6) or
             slot.startTime.minute.toLong()
-private fun getWeekIndex(date: LocalDate,timeTable: TimeTable): Int {
+
+private fun getWeekIndex(date: LocalDate, timeTable: TimeTable): Int {
     val offsetDays = (date.dayOfWeek.isoDayNumber - DayOfWeek.MONDAY.isoDayNumber).mod(7)
     val currentMonday = date.minus(offsetDays.toLong(), DateTimeUnit.DAY)
 
@@ -125,7 +135,7 @@ fun TimeTable.getWeekIndexForDate(date: LocalDate): Int {
 
 // 将单门课程全部时间段的 CourseUi 列表
 fun Course.toUiCourses(): List<CourseUi> =
-    timeSlots.map { slot ->
+    timeSlots.mapIndexed { index, slot ->
         CourseUi(
             id = generateCourseUiId(id, slot),
             name = name,
@@ -133,7 +143,8 @@ fun Course.toUiCourses(): List<CourseUi> =
             recurrence = recurrence,
             color = color,
             location = location,
-            teacher = teacher
+            teacher = teacher,
+            periodRange = index + 1
         )
     }.sortedWith(
         compareBy<CourseUi> { it.timeSlot.dayOfWeek.isoDayNumber } // 星期排序
@@ -153,7 +164,7 @@ fun Course.toDayUiCourses(date: LocalDate, isOddWeek: Boolean): List<CourseUi> {
     return timeSlots
         .filter { it.dayOfWeek == date.dayOfWeek }  // 同一天
         .sortedBy { it.startTime }                 // 同一天按开始时间排序
-        .map { slot ->
+        .mapIndexed { index, slot ->
             CourseUi(
                 id = generateCourseUiId(id, slot),
                 name = name,
@@ -161,7 +172,8 @@ fun Course.toDayUiCourses(date: LocalDate, isOddWeek: Boolean): List<CourseUi> {
                 recurrence = recurrence,
                 color = color,
                 location = location,
-                teacher = teacher
+                teacher = teacher,
+                periodRange = index + 1
             )
         }
 }
@@ -172,8 +184,12 @@ fun TimeTable.toDayUiCourses(date: LocalDate): List<CourseUi> {
 
     val isOddWeek = weekIndex % 2 != 0
 
-    return allCourses
-        .flatMap { course -> course.toDayUiCourses(date, isOddWeek) } // 复用 Course 层逻辑
-        .sortedBy { it.timeSlot.startTime }
+    val rawList = allCourses
+        .flatMap { course -> course.toDayUiCourses(date, isOddWeek) }
+        .sortedBy { it.timeSlot.startTime } // 确保按时间顺序排列
+
+    return rawList.mapIndexed { index, courseUi ->
+        courseUi.copy(periodRange = index + 1)
+    }// 使用 copy() 创建新对象，更新 periodRange 字段
 }
 

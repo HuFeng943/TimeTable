@@ -1,7 +1,6 @@
 package com.hufeng943.timetable.presentation
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
@@ -14,7 +13,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import androidx.profileinstaller.ProfileInstaller
-import androidx.profileinstaller.ProfileVerifier
 import androidx.wear.compose.foundation.pager.HorizontalPager
 import androidx.wear.compose.foundation.pager.rememberPagerState
 import com.hufeng943.timetable.presentation.theme.TimeTableTheme
@@ -32,18 +30,18 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         super.onCreate(savedInstanceState)
         lifecycleScope.launch(Dispatchers.IO)
-        { ProfileInstaller.writeProfile(this@MainActivity)} // 给没Google Play的设备跑跑 AOT
+        { ProfileInstaller.writeProfile(this@MainActivity) } // 给没Google Play的设备跑跑 AOT
         // 硬编码时间，测试用
-        val courses = getSampleTimetable().toDayUiCourses(LocalDate(2025,11,1))
+        val courses = getSampleTimetable().toDayUiCourses(LocalDate(2025, 11, 1))
 
         setContent {
-            TimeTableTheme{
+            TimeTableTheme {
                 HorizontalPager(
                     modifier = Modifier.fillMaxSize(),
                     state = rememberPagerState { 10 },
 
-                ) { page -> // page 是当前页面的索引 (0 到 9)
-                    when(page) {
+                    ) { page -> // page 是当前页面的索引 (0 到 9)
+                    when (page) {
                         0 -> TimetableScreen(courses = courses, title = "哈吉米南北绿豆！")
                         // TODO 更多页面
                         else -> {
@@ -91,11 +89,11 @@ private fun getSampleTimetable(): TimeTable {
                         startTime = LocalTime(9, 0),
                         endTime = LocalTime(11, 0),
                         dayOfWeek = DayOfWeek.SATURDAY
-                    ),TimeSlot(
+                    ), TimeSlot(
                         startTime = LocalTime(19, 0),
                         endTime = LocalTime(22, 0),
                         dayOfWeek = DayOfWeek.SATURDAY
-                    ),TimeSlot(
+                    ), TimeSlot(
                         startTime = LocalTime(13, 30),
                         endTime = LocalTime(15, 0),
                         dayOfWeek = DayOfWeek.SATURDAY
@@ -114,7 +112,7 @@ private fun getSampleTimetable(): TimeTable {
                         startTime = LocalTime(15, 30),
                         endTime = LocalTime(17, 0),
                         dayOfWeek = DayOfWeek.SATURDAY
-                    ),                    TimeSlot(
+                    ), TimeSlot(
                         startTime = LocalTime(13, 30),
                         endTime = LocalTime(14, 0),
                         dayOfWeek = DayOfWeek.SATURDAY
