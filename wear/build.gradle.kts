@@ -15,10 +15,17 @@ android {
 
     defaultConfig {
         applicationId = "com.hufeng943.timetable"
-        minSdk = 30
+        minSdk = 27
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+
+        // MM: Major (2 digits, 00-99)
+        // mm: Minor (2 digits, 00-99)
+        // pp: Patch (2 digits, 00-99)
+        // rr: Release/Alpha/Beta Iteration (2 digits, 01-99)
+        // versionCode = MMmmpprr
+        versionCode = 2
+        versionName = "0.0.0-alpha02"
+
         ndk {
             abiFilters += listOf("armeabi-v7a", "x86", "arm64-v8a", "x86_64")
         }
@@ -28,7 +35,7 @@ android {
         abi {
             isEnable = true // 启用 ABI 分割打包
             reset()
-            include("armeabi-v7a", "x86", "arm64-v8a", "x86_64")
+            include("armeabi-v7a", "arm64-v8a")
 
             isUniversalApk = true
         }
@@ -37,10 +44,11 @@ android {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
+            // isDebuggable = true
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
 
@@ -75,6 +83,7 @@ dependencies {
     implementation(libs.horologist.tiles)
     implementation(libs.androidx.watchface.complications.data.source.ktx)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.compose.runtime)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)

@@ -4,6 +4,7 @@ import android.text.format.DateFormat
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -23,6 +25,7 @@ import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.itemsIndexed
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.Card
+import androidx.wear.compose.material3.CardDefaults
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.Text
 import com.hufeng943.timetable.shared.CourseUi
@@ -62,16 +65,6 @@ fun TimetableScreen(
                 style = MaterialTheme.typography.titleMedium
             )
         }
-
-        if (courses.isEmpty()) {
-            item {
-                Text(
-                    text = "今天没课，休息！",
-                    style = MaterialTheme.typography.bodyLarge
-                )
-            }
-            return@ScalingLazyColumn
-        }
         itemsIndexed(
             items = courses,
             key = { _, pair -> pair.id } // 用课程ID稳定key
@@ -84,23 +77,26 @@ fun TimetableScreen(
 @Composable
 fun TimeTableCard(course: CourseUi) {
     Card(
-        onClick = {}
+        onClick = {},
+        contentPadding = PaddingValues(vertical = 4.dp, horizontal = 10.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(course.color),// 卡片背景色
+        )
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 8.dp),
-            verticalAlignment = Alignment.Top
+            verticalAlignment = Alignment.CenterVertically
         ) {
             // 区域 1 时间
             Column(
-                modifier = Modifier.width(IntrinsicSize.Min),
+                modifier = Modifier.width(IntrinsicSize.Min)
+                    .padding(top = 3.dp),
                 horizontalAlignment = Alignment.End, // 右对齐
-                verticalArrangement = Arrangement.Top
             ) {
-                TextTime(time = course.timeSlot.startTime) // 调用最小组件
+                TextTime(time = course.timeSlot.startTime)
                 Spacer(modifier = Modifier.height(2.dp)) // 垂直间距
-                TextTime(time = course.timeSlot.endTime) // 调用最小组件
+                TextTime(time = course.timeSlot.endTime)
             }
             // 区域 2 名称
             Spacer(modifier = Modifier.width(8.dp))
@@ -110,6 +106,7 @@ fun TimeTableCard(course: CourseUi) {
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis, // 超出部分显示省略号
                 modifier = Modifier.weight(1f)
+                    .align(Alignment.Top)// 置顶
 
             )
             // 区域 3 节次
@@ -117,7 +114,6 @@ fun TimeTableCard(course: CourseUi) {
             Text(
                 text = course.periodRange.toString(),
                 style = MaterialTheme.typography.displaySmall,
-                modifier = Modifier.align(Alignment.CenterVertically)// 居中
             )
         }
     }
@@ -140,7 +136,7 @@ fun TextTime(time: LocalTime) {
     if (is24Hour) {
         Text(
             text = timeStr,
-            style = MaterialTheme.typography.labelMedium
+            style = MaterialTheme.typography.labelSmall
         )
     } else {
         val amPm = remember(localTime) { TimeFormatters.amPmFormatter.format(localTime) }
@@ -151,7 +147,7 @@ fun TextTime(time: LocalTime) {
         ) {
             Text(
                 text = timeStr,
-                style = MaterialTheme.typography.labelMedium
+                style = MaterialTheme.typography.labelSmall
             )
             Text(
                 text = amPm,

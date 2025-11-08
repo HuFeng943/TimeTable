@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.hufeng943.timetable.shared
 
 // kotlinx.serialization
@@ -57,9 +59,9 @@ data class Course( // 科目
     val name: String,
     val timeSlots: List<TimeSlot> = emptyList(),
     val recurrence: WeekPattern = WeekPattern.EVERY_WEEK, // 默认每周重复
-    val location: String?,
-    val color: Int = 0xFF2196F3.toInt(), // 默认蓝色
-    val teacher: String?
+    val location: String? = null,
+    val color: Long = 0xFF2196F3, // 默认蓝色
+    val teacher: String? = null
 ) {
     init {
         require(name.isNotBlank()) { "Course name cannot be blank." }
@@ -68,13 +70,13 @@ data class Course( // 科目
 
 @Serializable
 data class TimeTable(
-    val allCourses: List<Course>,
+    val allCourses: List<Course> = emptyList(),
     val timeTableId: Long = 0,
     val semesterName: String, // 课程表的名称
     @Serializable(with = InstantAsLongSerializer::class)// 这是kotlin.time.Instant
     val createdAt: Instant,
     val semesterStart: LocalDate, // 课表开始日期
-    val semesterEnd: LocalDate? // 课表结束日期,有可能永不结束
+    val semesterEnd: LocalDate? = null // 课表结束日期,有可能永不结束
 ) {
     init {
         require(semesterName.isNotBlank()) { "Semester name cannot be blank." }
@@ -100,7 +102,7 @@ data class CourseUi(
     val id: Long,
     val name: String,
     val timeSlot: TimeSlot,
-    val color: Int,
+    val color: Long,
     val location: String?,
     val teacher: String?,
     val recurrence: WeekPattern,
