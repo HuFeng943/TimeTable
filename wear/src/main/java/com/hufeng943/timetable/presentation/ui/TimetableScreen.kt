@@ -2,6 +2,7 @@ package com.hufeng943.timetable.presentation.ui
 
 import android.text.format.DateFormat
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,15 +13,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.itemsIndexed
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
@@ -47,39 +51,70 @@ object TimeFormatters {
 
 @Composable
 fun TimetableScreen(
+    courses: List<CourseUi>?,
     modifier: Modifier = Modifier,
-    courses: List<CourseUi>,
+    navController: NavHostController,
     title: String,
     targetIndex: Int = 0
 ) {
-
-    ScalingLazyColumn(
-        modifier = modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        state = rememberScalingLazyListState(initialCenterItemIndex = targetIndex)
-    ) {
-        item {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleMedium
-            )
+    when {
+        courses == null -> {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                BasicText(
+                    text = "课程数据获取中…",
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
         }
-        itemsIndexed(
-            items = courses,
-            key = { _, pair -> pair.id } // 用课程ID稳定key
-        ) { _, pair ->
-            TimeTableCard(pair) // 调用列表项卡片
+
+        courses.isEmpty() -> {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                BasicText(
+                    text = "今天没有课程，是自由的一天！",
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+        }
+
+        else -> {
+            ScalingLazyColumn(
+                modifier = modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                state = rememberScalingLazyListState(initialCenterItemIndex = targetIndex)
+            ) {
+                item {
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
+                itemsIndexed(
+                    items = courses,
+                    key = { _, pair -> pair.id } // 用课程ID稳定key
+                ) { _, pair ->
+                    TimeTableCard(pair){ // 调用列表项卡片
+                        navController.navigate("courseDetail/${pair.id}") // 传递进去的单价执行的函数
+                    }
+                }
+            }
         }
     }
 }
 
 @Composable
-fun TimeTableCard(course: CourseUi) {
+fun TimeTableCard(course: CourseUi, onClick: () -> Unit) {
     Card(
-        onClick = {},
+        onClick = onClick,
         contentPadding = PaddingValues(vertical = 4.dp, horizontal = 10.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(course.color),// 卡片背景色
+        colors = CardDefaults.cardColors(
+            containerColor = Color(course.color),// 卡片背景色
         )
     ) {
         Row(
@@ -87,10 +122,12 @@ fun TimeTableCard(course: CourseUi) {
                 .fillMaxWidth()
                 .padding(horizontal = 8.dp),
             verticalAlignment = Alignment.CenterVertically
+
         ) {
             // 区域 1 时间
             Column(
-                modifier = Modifier.width(IntrinsicSize.Min)
+                modifier = Modifier
+                    .width(IntrinsicSize.Min)
                     .padding(top = 3.dp),
                 horizontalAlignment = Alignment.End, // 右对齐
             ) {
@@ -99,18 +136,19 @@ fun TimeTableCard(course: CourseUi) {
                 TextTime(time = course.timeSlot.endTime)
             }
             // 区域 2 名称
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = course.name,
                 style = MaterialTheme.typography.titleLarge,
                 maxLines = 2,
-                overflow = TextOverflow.Ellipsis, // 超出部分显示省略号
-                modifier = Modifier.weight(1f)
-                    .align(Alignment.Top)// 置顶
-
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 8.dp),
+                textAlign = TextAlign.Center // 水平文字居中
             )
             // 区域 3 节次
-            Spacer(modifier = Modifier.width(14.dp))
+            Spacer(modifier = Modifier.width(16.dp))
             Text(
                 text = course.periodRange.toString(),
                 style = MaterialTheme.typography.displaySmall,

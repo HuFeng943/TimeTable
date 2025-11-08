@@ -13,8 +13,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.navigation.NavHostController
 import androidx.wear.compose.foundation.pager.HorizontalPager
 import androidx.wear.compose.foundation.pager.rememberPagerState
+import androidx.wear.compose.material3.Text
+import androidx.wear.compose.navigation.SwipeDismissableNavHost
+import androidx.wear.compose.navigation.composable
+import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.hufeng943.timetable.presentation.theme.TimeTableTheme
 import com.hufeng943.timetable.shared.Course
 import com.hufeng943.timetable.shared.CourseUi
@@ -28,9 +33,32 @@ import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 
+@Composable
+fun MainNavHost() {
+    val navController = rememberSwipeDismissableNavController() // Horologist
+    SwipeDismissableNavHost(
+        navController = navController,
+        startDestination = "nowTimetable"
+    ) {
+        composable("nowTimetable") {
+            MainContent(navController)
+        }
+        composable("courseDetail/{courseId}") { backStackEntry ->
+            val courseId = backStackEntry.arguments?.getString("courseId")?.toInt()
+            CourseDetailScreen(courseId = courseId)
+        }
+    }
+}
+@Composable // 测试用
+fun CourseDetailScreen(courseId: Int?) {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Text(text = "课程详情页: $courseId")
+    }
+}
+
 
 @Composable
-fun MainContent() {
+fun MainContent(navController: NavHostController) {
     TimeTableTheme {
         // 异步加载课程数据
         val coursesState: MutableState<List<CourseUi>?> = remember {
@@ -50,48 +78,18 @@ fun MainContent() {
             state = rememberPagerState { 10 }
         ) { page ->
             when (page) {
-                0 -> TimetablePagerItem(courses = courses)
+                0 -> TimetableScreen(
+                    courses = courses,
+                    title = "哈基米",
+                    navController = navController
+                )
+
                 else -> PagePlaceholder(page)
             }
 
         }
     }
 }
-
-@Composable
-fun TimetablePagerItem(courses: List<CourseUi>?) {
-    when {
-        courses == null -> {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                BasicText(
-                    text = "课程数据获取中…",
-                    style = TextStyle(color = Color.White)
-                )
-            }
-        }
-        courses.isEmpty() -> {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                BasicText(
-                    text = "今天没有课程，是自由的一天！",
-                    style = TextStyle(color = Color.White)
-                )
-            }
-        }
-        else -> {// 一定有值项
-            TimetableScreen(
-                courses = courses,
-                title = "哈吉米南北绿豆！"
-            )
-        }
-    }
-}
-
 
 
 @Composable
@@ -129,7 +127,7 @@ private fun getSampleTimetable(): TimeTable {
             ),
             Course(
                 id = 11919,
-                name = "数学6 (单周)",
+                name = "低等数学",
                 timeSlots = listOf(
                     TimeSlot(
                         startTime = LocalTime(9, 0),
@@ -152,7 +150,7 @@ private fun getSampleTimetable(): TimeTable {
             ),
             Course(
                 id = 810,
-                name = "英语6 (每周)",
+                name = "English",
                 timeSlots = listOf(
                     // 周六的英语课
                     TimeSlot(
