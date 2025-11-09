@@ -100,7 +100,7 @@ fun TimetableScreen(
                     key = { _, pair -> pair.id } // 用课程ID稳定key
                 ) { _, pair ->
                     TimeTableCard(pair){ // 调用列表项卡片
-                        navController.navigate("courseDetail/${pair.id}") // 传递进去的单价执行的函数
+                        navController.navigate("course_detail/${pair.id}") // 传递进去的单价执行的函数
                     }
                 }
             }

@@ -9,7 +9,7 @@ import androidx.profileinstaller.ProfileInstaller
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import android.util.Log
-import com.hufeng943.timetable.presentation.ui.MainNavHost
+import com.hufeng943.timetable.presentation.ui.AppNavHost
 
 
 class MainActivity : ComponentActivity() {
@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
         } // 给没Google Play的设备跑跑 AOT
 
         setContent {
-            MainNavHost()
+            AppNavHost()
         }
     }
 }

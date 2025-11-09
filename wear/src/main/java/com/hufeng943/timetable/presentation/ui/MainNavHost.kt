@@ -1,6 +1,7 @@
 package com.hufeng943.timetable.presentation.ui
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
@@ -34,45 +35,79 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 
 @Composable
-fun MainNavHost() {
-    val navController = rememberSwipeDismissableNavController() // Horologist
+fun AppNavHost() {// 现在数据由AppNavHost读取
+    val navController = rememberSwipeDismissableNavController()
+
+    // 共享课程列表
+    val coursesState: MutableState<List<CourseUi>?> = remember { mutableStateOf(null) }
+    val courses: List<CourseUi>? by coursesState
+
+    // 异步加载课程
+    LaunchedEffect(Unit) {
+        val sample = withContext(Dispatchers.Default) {
+            // TODO 这里应该要换成个实列的
+            getSampleTimetable().toDayUiCourses(LocalDate(2025, 11, 1))
+        }
+        coursesState.value = sample
+    }
+
     SwipeDismissableNavHost(
         navController = navController,
-        startDestination = "nowTimetable"
+        startDestination = "loading"
     ) {
-        composable("nowTimetable") {
-            MainContent(navController)
+        composable("loading") {
+            LoadingScreen(courses) {
+                navController.navigate("main") {
+                    popUpTo("loading") { inclusive = true } // 退出 loading
+                }
+            }
         }
-        composable("courseDetail/{courseId}") { backStackEntry ->
-            val courseId = backStackEntry.arguments?.getString("courseId")?.toInt()
-            CourseDetailScreen(courseId = courseId)
+        composable("main") {
+            HomeScreen(navController, courses)
+        }
+        composable("course_detail/{courseId}") { backStackEntry ->
+            val courseUiId = backStackEntry.arguments?.getString("courseId")?.toLong()
+            CourseDetailScreen(courseUiId = courseUiId, courses = courses)
         }
     }
 }
-@Composable // 测试用
-fun CourseDetailScreen(courseId: Int?) {
+
+@Composable // TODO 这个也是单独提取出来
+fun CourseDetailScreen(courseUiId: Long?, courses: List<CourseUi>?) {
+    val courseUi = remember(courseUiId, courses) {
+        courses?.find { it.id == courseUiId }
+    }
+
+    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        if (courseUi != null) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(text = courseUi.name)
+                Text(text = "教师：${courseUi.teacher ?: "无"}")
+                Text(text = "地点：${courseUi.location ?: "未填写"}")
+                Text(text = "时间：${courseUi.timeSlot.dayOfWeek} ${courseUi.timeSlot.startTime} - ${courseUi.timeSlot.endTime}")
+                Text(text = "重复：${courseUi.recurrence}")
+            }
+        } else {
+            Text(text = "未找到课程数据")
+        }
+    }
+}
+
+@Composable // TODO 单独出来
+fun LoadingScreen(courses: List<CourseUi>?, onReady: () -> Unit) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text = "课程详情页: $courseId")
+        if (courses == null) {
+            Text("课程加载中…")
+        } else {
+            LaunchedEffect(courses) { onReady() }
+        }
     }
 }
 
 
 @Composable
-fun MainContent(navController: NavHostController) {
+fun HomeScreen(navController: NavHostController, courses: List<CourseUi>?) {
     TimeTableTheme {
-        // 异步加载课程数据
-        val coursesState: MutableState<List<CourseUi>?> = remember {
-            mutableStateOf(null)
-        }
-        val courses: List<CourseUi>? by coursesState
-        LaunchedEffect(Unit) {
-            val sample = withContext(Dispatchers.Default) {
-                // TODO 读取本地课程表，返回 List<CourseUi>
-                getSampleTimetable().toDayUiCourses(LocalDate(2025, 11, 1))
-            }
-            coursesState.value = sample
-        }
-
         HorizontalPager(
             modifier = Modifier.fillMaxSize(),
             state = rememberPagerState { 10 }
@@ -86,7 +121,6 @@ fun MainContent(navController: NavHostController) {
 
                 else -> PagePlaceholder(page)
             }
-
         }
     }
 }
