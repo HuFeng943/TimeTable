@@ -32,7 +32,10 @@ import androidx.wear.compose.material3.Card
 import androidx.wear.compose.material3.CardDefaults
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.Text
-import com.hufeng943.timetable.shared.CourseUi
+import com.hufeng943.timetable.shared.model.TimeTable
+import com.hufeng943.timetable.shared.ui.CourseUi
+import com.hufeng943.timetable.shared.ui.CourseWithSlotId
+import com.hufeng943.timetable.shared.ui.mappers.toCourseUi
 import kotlinx.datetime.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -51,26 +54,15 @@ object TimeFormatters {
 
 @Composable
 fun TimetableScreen(
-    courses: List<CourseUi>?,
+    timeTable: TimeTable,
+    coursesIdList: List<CourseWithSlotId>,
     modifier: Modifier = Modifier,
     navController: NavHostController,
     title: String,
     targetIndex: Int = 0
 ) {
     when {
-        courses == null -> {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                BasicText(
-                    text = "课程数据获取中…",
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
-        }
-
-        courses.isEmpty() -> {
+        coursesIdList.isEmpty() -> {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
@@ -83,6 +75,11 @@ fun TimetableScreen(
         }
 
         else -> {
+            val sortedCourses = remember(coursesIdList) {
+                coursesIdList.sortedWith(compareBy { timeTable.toCourseUi(it)!!.timeSlot.startTime })
+            }
+
+
             ScalingLazyColumn(
                 modifier = modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -96,13 +93,18 @@ fun TimetableScreen(
                     )
                 }
                 itemsIndexed(
-                    items = courses,
-                    key = { _, pair -> pair.id } // 用课程ID稳定key
-                ) { _, pair ->
-                    TimeTableCard(pair){ // 调用列表项卡片
-                        navController.navigate("course_detail/${pair.id}") // 传递进去的单价执行的函数
+                    items = sortedCourses,
+                    key = { _, item -> "${item.courseID}-${item.timeSlotID}" } // 唯一 key
+                ) { dailyOrderIndex, idPair ->
+                    val course = timeTable.toCourseUi(idPair)?.copy(dailyOrder = dailyOrderIndex + 1)
+                    if (course != null) {
+                        TimeTableCard(course) {
+                            // 传递两ID
+                            navController.navigate("course_detail/${idPair.courseID}/${idPair.timeSlotID}")
+                        }
                     }
                 }
+
             }
         }
     }
@@ -150,7 +152,7 @@ fun TimeTableCard(course: CourseUi, onClick: () -> Unit) {
             // 区域 3 节次
             Spacer(modifier = Modifier.width(16.dp))
             Text(
-                text = course.periodRange.toString(),
+                text = course.dailyOrder.toString(),
                 style = MaterialTheme.typography.displaySmall,
             )
         }
