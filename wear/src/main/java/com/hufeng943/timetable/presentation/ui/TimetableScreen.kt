@@ -94,13 +94,13 @@ fun TimetableScreen(
                 }
                 itemsIndexed(
                     items = sortedCourses,
-                    key = { _, item -> "${item.courseID}-${item.timeSlotID}" } // 唯一 key
+                    key = { _, item -> "${item.courseId}-${item.timeSlotId}" } // 唯一 key
                 ) { dailyOrderIndex, idPair ->
                     val course = timeTable.toCourseUi(idPair)?.copy(dailyOrder = dailyOrderIndex + 1)
                     if (course != null) {
                         TimeTableCard(course) {
                             // 传递两ID
-                            navController.navigate("course_detail/${idPair.courseID}/${idPair.timeSlotID}")
+                            navController.navigate("course_detail/${idPair.courseId}/${idPair.timeSlotId}")
                         }
                     }
                 }

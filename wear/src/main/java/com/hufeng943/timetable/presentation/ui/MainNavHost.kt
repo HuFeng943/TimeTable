@@ -28,6 +28,7 @@ import com.hufeng943.timetable.shared.model.TimeSlot
 import com.hufeng943.timetable.shared.model.TimeTable
 import com.hufeng943.timetable.shared.model.WeekPattern
 import com.hufeng943.timetable.shared.ui.CourseWithSlotId
+import com.hufeng943.timetable.shared.ui.mappers.getWeekIndexForDate
 import com.hufeng943.timetable.shared.ui.mappers.toCourseUi
 import com.hufeng943.timetable.shared.ui.mappers.toDayCourseWithSlots
 import kotlinx.coroutines.Dispatchers
@@ -60,7 +61,8 @@ fun AppNavHost() {// 数据由AppNavHost读取
         }
 
         timeTableState.value = sampleTimetable
-        todayCoursesIdListState.value = sampleTimetable.toDayCourseWithSlots(today)
+        val weekIndex = sampleTimetable.getWeekIndexForDate(today)
+        todayCoursesIdListState.value = sampleTimetable.toDayCourseWithSlots(today.dayOfWeek,weekIndex)
 
         // ok加载完了好吧
         navController.navigate("main") {
