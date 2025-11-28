@@ -1,4 +1,4 @@
-package com.hufeng943.timetable.presentation.ui
+package com.hufeng943.timetable.presentation.ui.screens
 
 import android.text.format.DateFormat
 import androidx.compose.foundation.layout.Arrangement

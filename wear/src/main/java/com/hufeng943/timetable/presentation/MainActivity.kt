@@ -1,15 +1,16 @@
 package com.hufeng943.timetable.presentation
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import androidx.profileinstaller.ProfileInstaller
+import com.hufeng943.timetable.presentation.theme.TimeTableTheme
+import com.hufeng943.timetable.presentation.ui.AppNavHost
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import android.util.Log
-import com.hufeng943.timetable.presentation.ui.AppNavHost
 
 
 class MainActivity : ComponentActivity() {
@@ -27,7 +28,9 @@ class MainActivity : ComponentActivity() {
         } // 给没Google Play的设备跑跑 AOT
 
         setContent {
-            AppNavHost()
+            TimeTableTheme {
+                AppNavHost()
+            }
         }
     }
 }
