@@ -26,9 +26,8 @@ fun HomeScreen(
         when (page) {
             0 -> TimetablePager(
                 timeTable = timeTable, // 传递 TimeTable
-                coursesIdList = todayCoursesIdList, title = "哈基米", navController = navController
+                coursesIdList = todayCoursesIdList, title = "今日程", navController = navController
             )
-
             else -> PagePlaceholder(page)
         }
     }

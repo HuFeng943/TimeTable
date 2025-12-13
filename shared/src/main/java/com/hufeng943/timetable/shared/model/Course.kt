@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class Course(
-    val id: Long,
+    val id: Long = 0,
     val name: String,
     val timeSlots: List<TimeSlot> = emptyList(),
     val location: String? = null,

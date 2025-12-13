@@ -7,13 +7,26 @@ import androidx.activity.compose.setContent
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import androidx.profileinstaller.ProfileInstaller
+import androidx.room.Room
 import com.hufeng943.timetable.presentation.theme.TimeTableTheme
 import com.hufeng943.timetable.presentation.ui.AppNavHost
+import com.hufeng943.timetable.shared.data.dao.TimeTableDao
+import com.hufeng943.timetable.shared.data.database.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
 class MainActivity : ComponentActivity() {
+    private val appDatabase: AppDatabase by lazy {
+        Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java,
+            "timetable-db"
+        ).build()
+    }
+    private val dao: TimeTableDao by lazy {
+        appDatabase.timeTableDao()
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
@@ -29,7 +42,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             TimeTableTheme {
-                AppNavHost()
+                AppNavHost(dao)
             }
         }
     }

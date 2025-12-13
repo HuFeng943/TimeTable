@@ -1,4 +1,4 @@
-package com.hufeng943.timetable.shared.room.entities
+package com.hufeng943.timetable.shared.data.entities
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
