@@ -14,7 +14,11 @@ kotlin {
         jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
         freeCompilerArgs.add("-opt-in=kotlin.time.ExperimentalTime")
     }
+    sourceSets.getByName("main").kotlin.srcDir("build/generated/ksp/main/kotlin")
+}
 
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas") // 指定 schema 文件的存放路径
 }
 
 dependencies {

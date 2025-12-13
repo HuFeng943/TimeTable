@@ -9,8 +9,8 @@ import androidx.compose.runtime.remember
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
-import com.hufeng943.timetable.presentation.ui.screens.CourseDetailPager
-import com.hufeng943.timetable.presentation.ui.screens.HomePager
+import com.hufeng943.timetable.presentation.ui.pagers.CourseDetailPager
+import com.hufeng943.timetable.presentation.ui.screens.HomeScreen
 import com.hufeng943.timetable.presentation.ui.screens.LoadingScreen
 import com.hufeng943.timetable.shared.model.Course
 import com.hufeng943.timetable.shared.model.TimeSlot
@@ -50,7 +50,8 @@ fun AppNavHost() {// 数据由AppNavHost读取
 
         timeTableState.value = sampleTimetable
         val weekIndex = sampleTimetable.getWeekIndexForDate(today)
-        todayCoursesIdListState.value = sampleTimetable.toDayCourseWithSlots(today.dayOfWeek,weekIndex)
+        todayCoursesIdListState.value =
+            sampleTimetable.toDayCourseWithSlots(today.dayOfWeek, weekIndex)
 
         // ok加载完了好吧
         navController.navigate("main") {
@@ -65,7 +66,7 @@ fun AppNavHost() {// 数据由AppNavHost读取
             LoadingScreen()
         }
         composable("main") {
-            HomePager(navController, timeTable!!, todayCoursesIdList!!)
+            HomeScreen(navController, timeTable!!, todayCoursesIdList!!)
         }
         composable("course_detail/{courseId}/{timeSlotId}") { backStackEntry ->
             val courseWithSlotId = CourseWithSlotId(
@@ -84,6 +85,7 @@ private fun getSampleTimetable(): TimeTable {
             Course(
                 id = 1145, name = "物理5 (双周)", timeSlots = listOf(
                     TimeSlot(
+                        id = 0,
                         startTime = LocalTime(13, 30),
                         endTime = LocalTime(15, 0),
                         dayOfWeek = DayOfWeek.SATURDAY,
@@ -93,16 +95,19 @@ private fun getSampleTimetable(): TimeTable {
             ), Course(
                 id = 11919, name = "低等数学", timeSlots = listOf(
                     TimeSlot(
+                        id = 1,
                         startTime = LocalTime(9, 0),
                         endTime = LocalTime(11, 0),
                         dayOfWeek = DayOfWeek.SATURDAY,
                         recurrence = WeekPattern.ODD_WEEK // 增加：单周课
                     ), TimeSlot(
+                        id = 2,
                         startTime = LocalTime(19, 0),
                         endTime = LocalTime(22, 0),
                         dayOfWeek = DayOfWeek.SATURDAY,
                         recurrence = WeekPattern.ODD_WEEK
                     ), TimeSlot(
+                        id = 3,
                         startTime = LocalTime(10, 30),
                         endTime = LocalTime(15, 0),
                         dayOfWeek = DayOfWeek.SATURDAY,
@@ -113,11 +118,13 @@ private fun getSampleTimetable(): TimeTable {
                 id = 810, name = "English", timeSlots = listOf(
                     // 周六的英语课
                     TimeSlot(
+                        id = 4,
                         startTime = LocalTime(15, 30),
                         endTime = LocalTime(17, 0),
                         dayOfWeek = DayOfWeek.SATURDAY,
                         recurrence = WeekPattern.EVERY_WEEK // 每周都上
                     ), TimeSlot(
+                        id = 5,
                         startTime = LocalTime(13, 30),
                         endTime = LocalTime(14, 0),
                         dayOfWeek = DayOfWeek.SATURDAY,

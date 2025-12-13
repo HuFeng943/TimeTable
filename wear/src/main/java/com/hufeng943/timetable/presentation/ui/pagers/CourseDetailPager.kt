@@ -1,4 +1,4 @@
-package com.hufeng943.timetable.presentation.ui.screens
+package com.hufeng943.timetable.presentation.ui.pagers
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,8 +22,7 @@ fun CourseDetailPager(timeTable: TimeTable?, courseWithSlotId: CourseWithSlotId?
     val courseId = if (timeTable != null && courseWithSlotId != null) {
         timeTable.toCourseUi(
             CourseWithSlotId(
-                courseWithSlotId.courseId,
-                courseWithSlotId.timeSlotId
+                courseWithSlotId.courseId, courseWithSlotId.timeSlotId
             )
         )
     } else null
@@ -62,6 +61,6 @@ fun DetailsScreen(courseUi: CourseUi) {
 }
 
 @Composable
-fun CourseListScreen(courseUi: CourseUi){
+fun CourseListScreen(courseUi: CourseUi) {
     //TODO
 }

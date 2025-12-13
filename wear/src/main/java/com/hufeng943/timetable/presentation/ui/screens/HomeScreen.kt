@@ -11,11 +11,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.navigation.NavHostController
 import androidx.wear.compose.foundation.pager.HorizontalPager
 import androidx.wear.compose.foundation.pager.rememberPagerState
+import com.hufeng943.timetable.presentation.ui.pagers.TimetablePager
 import com.hufeng943.timetable.shared.model.TimeTable
 import com.hufeng943.timetable.shared.ui.CourseWithSlotId
 
 @Composable
-fun HomePager(
+fun HomeScreen(
     navController: NavHostController,
     timeTable: TimeTable,
     todayCoursesIdList: List<CourseWithSlotId>
@@ -23,11 +24,9 @@ fun HomePager(
     HorizontalPager(
         modifier = Modifier.fillMaxSize(), state = rememberPagerState { 10 }) { page ->
         when (page) {
-            0 -> TimetableScreen(
+            0 -> TimetablePager(
                 timeTable = timeTable, // 传递 TimeTable
-                coursesIdList = todayCoursesIdList,
-                title = "哈基米",
-                navController = navController
+                coursesIdList = todayCoursesIdList, title = "哈基米", navController = navController
             )
 
             else -> PagePlaceholder(page)
