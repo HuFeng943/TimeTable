@@ -15,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId = "com.hufeng943.timetable"
-        minSdk = 27
+        minSdk = 28
         targetSdk = 36
         renderscriptSupportModeEnabled = true
         // MM: Major (2 digits, 00-99)

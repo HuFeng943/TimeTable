@@ -22,17 +22,12 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
     private val appDatabase: AppDatabase by lazy {
         Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java,
-            "timetable-db"
+            applicationContext, AppDatabase::class.java, "timetable-db"
         ).build()
     }
-
     private val repository: TimeTableRepositoryImpl by lazy {
         TimeTableRepositoryImpl(appDatabase.timeTableDao())
     }
-
-    // 3️⃣ ViewModel 用官方推荐方式绑定生命周期
     private val viewModel: TimeTableViewModel by viewModels {
         TimeTableViewModelFactory(repository)
     }
@@ -40,8 +35,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
-        lifecycleScope.launch(Dispatchers.IO)
-        {
+        lifecycleScope.launch(Dispatchers.IO) {
             try {
                 ProfileInstaller.writeProfile(this@MainActivity)
                 Log.d("ProfileInstaller", "AOT profile 写入成功")

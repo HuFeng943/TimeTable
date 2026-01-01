@@ -1,4 +1,4 @@
-package com.hufeng943.timetable.presentation.ui.pagers
+package com.hufeng943.timetable.presentation.ui.screens.home
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
