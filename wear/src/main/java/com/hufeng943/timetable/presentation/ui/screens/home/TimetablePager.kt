@@ -18,6 +18,7 @@ import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import com.hufeng943.timetable.R
+import com.hufeng943.timetable.presentation.NavRoutes.courseDetail
 import com.hufeng943.timetable.presentation.ui.components.TimeTableCard
 import com.hufeng943.timetable.shared.model.TimeTable
 import com.hufeng943.timetable.shared.ui.CourseWithSlotId
@@ -72,7 +73,7 @@ fun TimetablePager(
                         if (course != null) {
                             TimeTableCard(course) {
                                 // 传递两ID
-                                navController.navigate("course_detail/${idPair.courseId}/${idPair.timeSlotId}")
+                                navController.navigate(courseDetail(idPair.courseId,idPair.timeSlotId))
                             }
                         }
                     }

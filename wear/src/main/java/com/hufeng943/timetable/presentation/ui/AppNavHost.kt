@@ -8,6 +8,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import com.hufeng943.timetable.presentation.NavRoutes
 import com.hufeng943.timetable.presentation.ui.screens.coursedetail.CourseDetailScreen
 import com.hufeng943.timetable.presentation.ui.screens.editcourse.EditCourseScreen
 import com.hufeng943.timetable.presentation.ui.screens.home.HomeScreen
@@ -25,19 +26,19 @@ fun AppNavHost(viewModel: TimeTableViewModel) {
 
 
     SwipeDismissableNavHost(
-        navController = navController, startDestination = "loading"
+        navController = navController, startDestination = NavRoutes.LOADING
     ) {
-        composable("loading") {
+        composable(NavRoutes.LOADING) {
             LoadingScreen()
             if (timeTables != null) {
-                navController.navigate("main") {
-                    popUpTo("loading") { inclusive = true }
+                navController.navigate(NavRoutes.MAIN) {
+                    popUpTo(NavRoutes.LOADING) { inclusive = true }
                     Log.v("navController", "加载完成，跳转！")
                 }
             }
 
         }
-        composable("main") {
+        composable(NavRoutes.MAIN) {
             if (timeTables != null) {
                 HomeScreen(navController, timeTables!!)
             } else {
@@ -45,9 +46,7 @@ fun AppNavHost(viewModel: TimeTableViewModel) {
                 LoadingScreen()
             }
         }
-        composable("course_detail/{courseId}/{timeSlotId}") { backStackEntry ->
-            // TODO "course_detail/{timeTableId}/{courseId}/{timeSlotId}"
-            // val timeTableId = backStackEntry.longArg("timeTableId")
+        composable(NavRoutes.COURSE_DETAIL) { backStackEntry ->
             val currentTables = timeTables
             val courseId = backStackEntry.longArg("courseId")
             val timeSlotId = backStackEntry.longArg("timeSlotId")
@@ -61,7 +60,7 @@ fun AppNavHost(viewModel: TimeTableViewModel) {
                 LoadingScreen()
             }
         }
-        composable("edit_course"){
+        composable(NavRoutes.EDIT_COURSE){
             EditCourseScreen()
         }
     }
