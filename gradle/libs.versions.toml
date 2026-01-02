@@ -1,7 +1,7 @@
 [versions]
 # Gradle 插件/核心工具
 agp = "8.13.2"
-kotlin = "2.3.0"
+kotlin = "2.2.0"
 ksp = "2.3.4"
 
 # AndroidX/Google Core 依赖
@@ -33,6 +33,10 @@ room = "2.8.4"
 # KotlinX 依赖
 serialization = "1.9.0"
 kotlinxDatetime = "0.7.1"
+
+# Hilt
+hilt = "2.57.1"
+androidxHilt = "1.3.0"
 
 # 测试依赖
 junit = "4.13.2"
@@ -89,6 +93,10 @@ room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
 
+# Hilt
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHilt" }
 
 ## 测试依赖
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -99,6 +107,7 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 [plugins]
 # Android Gradle 插件
 android-application = { id = "com.android.application", version.ref = "agp" }
+hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 
 # Kotlin 插件 (全部使用统一的 `kotlin` 版本变量)
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

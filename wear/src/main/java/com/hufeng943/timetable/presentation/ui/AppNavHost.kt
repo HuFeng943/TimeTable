@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
@@ -19,7 +20,7 @@ import com.hufeng943.timetable.shared.model.TimeTable
 import com.hufeng943.timetable.shared.ui.CourseWithSlotId
 
 @Composable
-fun AppNavHost(viewModel: TimeTableViewModel) {
+fun AppNavHost(viewModel: TimeTableViewModel = hiltViewModel()) {
     val navController = rememberSwipeDismissableNavController()
 
     // 订阅 Flow -> Compose state
@@ -54,13 +55,15 @@ fun AppNavHost(viewModel: TimeTableViewModel) {
                             )
                         } else {
                             navController.navigate(NavRoutes.ERROR)
-                            // 这里才是真的出错了
                         }
                     }
                 }
                 composable(NavRoutes.EDIT_COURSE) {
                     RequireTable(timeTables) { tables ->
-                        EditCourseScreen(tables)
+                        EditCourseScreen(
+                            tables,
+                            onAction = viewModel::onAction
+                        )
                     }
                 }
             }

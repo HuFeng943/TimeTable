@@ -4,35 +4,17 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import androidx.profileinstaller.ProfileInstaller
-import androidx.room.Room
 import com.hufeng943.timetable.presentation.theme.TimeTableTheme
 import com.hufeng943.timetable.presentation.ui.AppNavHost
-import com.hufeng943.timetable.presentation.viewmodel.TimeTableViewModel
-import com.hufeng943.timetable.presentation.viewmodel.TimeTableViewModelFactory
-import com.hufeng943.timetable.shared.data.database.AppDatabase
-import com.hufeng943.timetable.shared.data.repository.TimeTableRepositoryImpl
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val appDatabase: AppDatabase by lazy {
-        Room.databaseBuilder(
-            applicationContext, AppDatabase::class.java, "timetable-db"
-        )
-            .fallbackToDestructiveMigration()
-            .build()
-    }
-    private val repository: TimeTableRepositoryImpl by lazy {
-        TimeTableRepositoryImpl(appDatabase.timeTableDao())
-    }
-    private val viewModel: TimeTableViewModel by viewModels {
-        TimeTableViewModelFactory(repository)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -48,7 +30,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             TimeTableTheme {
-                AppNavHost(viewModel)
+                AppNavHost()
             }
         }
     }

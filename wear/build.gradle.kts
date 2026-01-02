@@ -2,9 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-
-    //alias(libs.plugins.ksp)
-
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt.android)
 }
 
 android {
@@ -83,7 +82,6 @@ dependencies {
     implementation(libs.androidx.wear.compose.navigation)
     implementation(libs.androidx.compose.material.icons.core)
 
-    // implementation(libs.horologist.compose.layout)
     implementation(libs.androidx.tiles)
     implementation(libs.androidx.tiles.tooling.preview)
     implementation(libs.horologist.compose.tools)
@@ -96,25 +94,9 @@ dependencies {
     implementation(libs.androidx.profileinstaller)
     implementation(project(":shared"))
 
-    /*
+    // Hilt
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
+    ksp(libs.hilt.compiler)
 
-
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.compose.runtime)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
-    debugImplementation(libs.androidx.tiles.tooling)
-
-    implementation(libs.room.runtime)
-    implementation(libs.room.ktx)
-    implementation(libs.kotlinx.datetime)
-    implementation(project(":shared"))
-
-    implementation(libs.horologist.compose.layout)
-    implementation(libs.androidx.wear.compose.material3)
-    implementation(libs.androidx.wear.compose.foundation)
-    implementation(libs.androidx.wear.compose.navigation)
-    */
 }
