@@ -31,7 +31,7 @@ fun HomeScreen(
                 }
             }
 
-            1 -> MorePager()
+            1 -> MorePager(navController)
         }
     }
 

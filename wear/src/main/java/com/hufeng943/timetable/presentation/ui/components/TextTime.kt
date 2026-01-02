@@ -32,7 +32,7 @@ object TimeFormatters {
 @Composable
 fun TextTime(time: LocalTime) {
     val context = LocalContext.current
-    val is24Hour = remember { DateFormat.is24HourFormat(context) }
+    val is24Hour = DateFormat.is24HourFormat(context)
     val localTime = remember(time) { java.time.LocalTime.of(time.hour, time.minute) }
     val aTextStyle = MaterialTheme.typography.labelSmall.copy(
         fontSize = 10.sp,

@@ -9,6 +9,7 @@ import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.hufeng943.timetable.presentation.ui.screens.coursedetail.CourseDetailScreen
+import com.hufeng943.timetable.presentation.ui.screens.editcourse.EditCourseScreen
 import com.hufeng943.timetable.presentation.ui.screens.home.HomeScreen
 import com.hufeng943.timetable.presentation.ui.screens.loading.LoadingScreen
 import com.hufeng943.timetable.presentation.viewmodel.TimeTableViewModel
@@ -59,7 +60,9 @@ fun AppNavHost(viewModel: TimeTableViewModel) {
                 // TODO 单独一个异常界面
                 LoadingScreen()
             }
-
+        }
+        composable("edit_course"){
+            EditCourseScreen()
         }
     }
 }
