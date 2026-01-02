@@ -16,7 +16,7 @@ import kotlin.time.Instant
 @Serializable
 data class TimeTable(
     val allCourses: List<Course> = emptyList(),
-    val timeTableId: Long,
+    val timeTableId: Long = 0,
     val semesterName: String, // 课程表的名称
     @Serializable(with = InstantAsLongSerializer::class)// 这是kotlin.time.Instant
     val createdAt: Instant,
