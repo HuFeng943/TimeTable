@@ -24,6 +24,7 @@ fun EditCourseScreen() {
                     Text(stringResource(R.string.edit_course_header_title))
                 }
             }
+
         }
     }
 }

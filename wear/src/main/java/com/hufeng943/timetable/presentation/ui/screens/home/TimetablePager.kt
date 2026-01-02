@@ -10,7 +10,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.itemsIndexed
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
@@ -18,7 +17,8 @@ import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import com.hufeng943.timetable.R
-import com.hufeng943.timetable.presentation.NavRoutes.courseDetail
+import com.hufeng943.timetable.presentation.ui.LocalNavController
+import com.hufeng943.timetable.presentation.ui.NavRoutes.courseDetail
 import com.hufeng943.timetable.presentation.ui.components.TimeTableCard
 import com.hufeng943.timetable.shared.model.TimeTable
 import com.hufeng943.timetable.shared.ui.CourseWithSlotId
@@ -30,10 +30,11 @@ fun TimetablePager(
     timeTable: TimeTable,
     coursesIdList: List<CourseWithSlotId>,
     modifier: Modifier = Modifier,
-    navController: NavHostController,
     title: String,
     targetIndex: Int = 0
 ) {
+    val navController = LocalNavController.current
+
     when {
         coursesIdList.isEmpty() -> {
             Box(
