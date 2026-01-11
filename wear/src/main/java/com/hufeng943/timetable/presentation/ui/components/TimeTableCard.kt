@@ -46,9 +46,9 @@ fun TimeTableCard(course: CourseUi, onClick: () -> Unit) {
                     .padding(top = 3.dp),
                 horizontalAlignment = Alignment.End, // 右对齐
             ) {
-                TextTime(time = course.timeSlot.startTime)
+                TimeText(time = course.timeSlot.startTime)
                 Spacer(modifier = Modifier.height(2.dp)) // 垂直间距
-                TextTime(time = course.timeSlot.endTime)
+                TimeText(time = course.timeSlot.endTime)
             }
             // 区域 2 名称
             Spacer(modifier = Modifier.width(4.dp))

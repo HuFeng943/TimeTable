@@ -30,7 +30,7 @@ object TimeFormatters {
 }
 
 @Composable
-fun TextTime(time: LocalTime) {
+fun TimeText(time: LocalTime) {
     val context = LocalContext.current
     val is24Hour = DateFormat.is24HourFormat(context)
     val localTime = remember(time) { java.time.LocalTime.of(time.hour, time.minute) }
