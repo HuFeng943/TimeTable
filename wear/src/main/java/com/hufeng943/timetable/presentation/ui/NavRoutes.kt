@@ -4,6 +4,7 @@ object NavRoutes {
     const val LOADING = "loading"
     const val MAIN = "main"
     const val EDIT_COURSE = "edit_course"
+    const val ADD_COURSE = "add_course"
     const val COURSE_DETAIL = "course_detail/{courseId}/{timeSlotId}"
 
     const val ERROR = "error"

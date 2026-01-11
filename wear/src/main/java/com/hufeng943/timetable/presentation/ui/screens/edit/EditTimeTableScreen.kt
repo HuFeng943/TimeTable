@@ -24,6 +24,9 @@ import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
 import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.contract.TableAction
+import com.hufeng943.timetable.presentation.ui.LocalNavController
+import com.hufeng943.timetable.presentation.ui.NavRoutes
+import com.hufeng943.timetable.presentation.ui.NavRoutes.courseDetail
 import com.hufeng943.timetable.shared.model.TimeTable
 import kotlinx.datetime.LocalDate
 import kotlin.time.Clock
@@ -33,6 +36,7 @@ fun EditTimeTable(
     timeTables: List<TimeTable>,
     onAction: (TableAction) -> Unit
 ) {
+    val navController = LocalNavController.current
     val scrollState = rememberScalingLazyListState()
     ScreenScaffold(scrollState = scrollState) {
         ScalingLazyColumn(
@@ -74,7 +78,7 @@ fun EditTimeTable(
                 // 专门的添加按钮，放在列表最后
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = { onAction(TableAction.Add(newTable)) },
+                    onClick = { navController.navigate(NavRoutes.ADD_COURSE) },
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Default.Add, contentDescription = null)
