@@ -110,9 +110,8 @@ fun AddTimeTable(
                 }
             }
 
-            // 处理日期选择逻辑
             is PickerType.StartDate, is PickerType.EndDate -> {
-                BackHandler { pickerType = PickerType.Main }
+                BackHandler {}// 禁止返回
 
                 // 确定当前是给谁选日期
                 val isStart = currentPicker is PickerType.StartDate
@@ -128,15 +127,14 @@ fun AddTimeTable(
                 )
             }
 
-            // 处理名称逻辑
             PickerType.SemesterName -> {
                 BackHandler { pickerType = PickerType.Main }
-                // TODO: 这里放你的名称输入界面
+                // TODO 名称输入界面
             }
 
             PickerType.Color -> {
                 BackHandler { pickerType = PickerType.Main }
-                // TODO: 这里放你的名称输入界面
+                // TODO 颜色选择界面
             }
         }
     }
