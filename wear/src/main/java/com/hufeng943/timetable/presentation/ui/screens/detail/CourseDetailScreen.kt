@@ -8,15 +8,15 @@ import androidx.wear.compose.foundation.pager.HorizontalPager
 import androidx.wear.compose.foundation.pager.rememberPagerState
 import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.Text
-import com.hufeng943.timetable.shared.model.TimeTable
+import com.hufeng943.timetable.shared.model.Timetable
 import com.hufeng943.timetable.shared.ui.CourseWithSlotId
 import com.hufeng943.timetable.shared.ui.mappers.toCourseUi
 
 @Composable
-fun CourseDetailScreen(timeTable: TimeTable?, courseWithSlotId: CourseWithSlotId?) {
+fun CourseDetailScreen(timetable: Timetable?, courseWithSlotId: CourseWithSlotId?) {
     AppScaffold {
-        val courseId = if (timeTable != null && courseWithSlotId != null) {
-            timeTable.toCourseUi(
+        val courseId = if (timetable != null && courseWithSlotId != null) {
+            timetable.toCourseUi(
                 CourseWithSlotId(
                     courseWithSlotId.courseId, courseWithSlotId.timeSlotId
                 )

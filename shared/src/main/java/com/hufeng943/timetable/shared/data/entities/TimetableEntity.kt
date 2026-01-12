@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "time_tables")
-data class TimeTableEntity(
+data class TimetableEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
     val semesterName: String,

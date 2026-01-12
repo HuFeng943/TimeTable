@@ -7,7 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import androidx.profileinstaller.ProfileInstaller
-import com.hufeng943.timetable.presentation.theme.TimeTableTheme
+import com.hufeng943.timetable.presentation.theme.TimetableTheme
 import com.hufeng943.timetable.presentation.ui.AppNavHost
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
         } // 给没Google Play的设备跑跑 AOT
 
         setContent {
-            TimeTableTheme {
+            TimetableTheme {
                 AppNavHost()
             }
         }

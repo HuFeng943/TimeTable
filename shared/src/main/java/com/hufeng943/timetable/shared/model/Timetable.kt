@@ -11,12 +11,12 @@ import kotlin.time.Instant
 
 /**
  * 一个课程表，课程表里会有多个科目
- * timeTableId应该确保唯一性
+ * timetableId应该确保唯一性
  */
 @Serializable
-data class TimeTable(
+data class Timetable(
     val allCourses: List<Course> = emptyList(),
-    val timeTableId: Long = 0,
+    val timetableId: Long = 0,
     val semesterName: String, // 课程表的名称
     @Serializable(with = InstantAsLongSerializer::class)// 这是kotlin.time.Instant
     val createdAt: Instant,

@@ -9,5 +9,5 @@ object NavRoutes {
 
     const val ERROR = "error"
     fun courseDetail(courseId: Long, timeSlotId: Long) = "course_detail/$courseId/$timeSlotId"
-    // TODO "course_detail/{timeTableId}/{courseId}/{timeSlotId}"
+    // TODO "course_detail/{timetableId}/{courseId}/{timeSlotId}"
 }

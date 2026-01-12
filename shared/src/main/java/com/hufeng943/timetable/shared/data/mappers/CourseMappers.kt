@@ -1,8 +1,8 @@
 package com.hufeng943.timetable.shared.data.mappers
 
 import com.hufeng943.timetable.shared.data.entities.CourseEntity
-import com.hufeng943.timetable.shared.model.Course
 import com.hufeng943.timetable.shared.data.relations.CourseWithSlots
+import com.hufeng943.timetable.shared.model.Course
 
 fun CourseWithSlots.toCourse(): Course {
     return Course(
@@ -15,10 +15,10 @@ fun CourseWithSlots.toCourse(): Course {
     )
 }
 
-fun Course.toCourseEntity(timeTableId: Long): CourseEntity {
+fun Course.toCourseEntity(timetableId: Long): CourseEntity {
     return CourseEntity(
         id = this.id,
-        timeTableId = timeTableId, // 关联到父课表
+        timetableId = timetableId, // 关联到父课表
         name = this.name,
         location = this.location,
         color = this.color,

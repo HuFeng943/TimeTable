@@ -10,20 +10,20 @@ import androidx.room.PrimaryKey
     tableName = "courses",
     foreignKeys = [
         ForeignKey(
-            entity = TimeTableEntity::class,
+            entity = TimetableEntity::class,
             parentColumns = ["id"],
-            childColumns = ["timeTableId"],
+            childColumns = ["timetableId"],
             onDelete = ForeignKey.CASCADE
-        )// 与TimeTableEntity绑定
+        )// 与TimetableEntity绑定
     ],
     indices = [
-        Index("timeTableId"),
+        Index("timetableId"),
     ]
 )
 data class CourseEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long= 0,
-    val timeTableId: Long,
+    val timetableId: Long,
     val name: String,
     val location: String?,
     val color: Long,

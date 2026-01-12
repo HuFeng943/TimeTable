@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 pluginManagement {
     repositories {
         google {
@@ -19,7 +21,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "TimeTable"
+rootProject.name = "Timetable"
 include(":mobile")
 include(":wear")
 include(":shared")

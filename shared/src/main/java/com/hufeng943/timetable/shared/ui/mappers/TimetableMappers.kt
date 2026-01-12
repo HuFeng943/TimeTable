@@ -1,6 +1,6 @@
 package com.hufeng943.timetable.shared.ui.mappers
 
-import com.hufeng943.timetable.shared.model.TimeTable
+import com.hufeng943.timetable.shared.model.Timetable
 import com.hufeng943.timetable.shared.ui.CourseWithSlotId
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek
@@ -12,7 +12,7 @@ import kotlinx.datetime.minus
  * 返回日期在学期开始的第几周
  * @return 学期中的周次，从 1 开始计数。如果日期在学期开始之前，则返回 0
  */
-fun TimeTable.getWeekIndexForDate(date: LocalDate): Int {
+fun Timetable.getWeekIndexForDate(date: LocalDate): Int {
     val offsetDays = (date.dayOfWeek.isoDayNumber - DayOfWeek.MONDAY.isoDayNumber).mod(7)
     val currentMonday = date.minus(offsetDays.toLong(), DateTimeUnit.DAY)
 
@@ -27,7 +27,7 @@ fun TimeTable.getWeekIndexForDate(date: LocalDate): Int {
  * 仅是ID对应列表
  * @return 返回CourseWithSlotId
  */
-fun TimeTable.toCourseWithSlots(): List<CourseWithSlotId> =
+fun Timetable.toCourseWithSlots(): List<CourseWithSlotId> =
     allCourses.flatMap { it.toCourseWithSlots() }
 
 /**
@@ -38,7 +38,10 @@ fun TimeTable.toCourseWithSlots(): List<CourseWithSlotId> =
  * @param weekIndex 在第几周？（用来判断单双周）
  * @return 返回CourseWithSlotId
  */
-fun TimeTable.toDayCourseWithSlots(targetDayOfWeek: DayOfWeek,weekIndex: Int): List<CourseWithSlotId> {
+fun Timetable.toDayCourseWithSlots(
+    targetDayOfWeek: DayOfWeek,
+    weekIndex: Int
+): List<CourseWithSlotId> {
     if (weekIndex == 0) return emptyList()
     return allCourses.flatMap { course -> course.toDayCourseWithSlots(targetDayOfWeek, weekIndex) }
 }

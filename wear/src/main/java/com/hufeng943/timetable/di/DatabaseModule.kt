@@ -2,10 +2,10 @@ package com.hufeng943.timetable.di
 
 import android.content.Context
 import androidx.room.Room
-import com.hufeng943.timetable.shared.data.dao.TimeTableDao
+import com.hufeng943.timetable.shared.data.dao.TimetableDao
 import com.hufeng943.timetable.shared.data.database.AppDatabase
-import com.hufeng943.timetable.shared.data.repository.TimeTableRepository
-import com.hufeng943.timetable.shared.data.repository.TimeTableRepositoryImpl
+import com.hufeng943.timetable.shared.data.repository.TimetableRepository
+import com.hufeng943.timetable.shared.data.repository.TimetableRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,13 +26,13 @@ object DatabaseModule {
     }
 
     @Provides
-    fun provideTimeTableDao(db: AppDatabase): TimeTableDao {
-        return db.timeTableDao()
+    fun provideTimetableDao(db: AppDatabase): TimetableDao {
+        return db.timetableDao()
     }
 
     @Provides
     @Singleton
-    fun provideRepository(dao: TimeTableDao): TimeTableRepository {
-        return TimeTableRepositoryImpl(dao)
+    fun provideRepository(dao: TimetableDao): TimetableRepository {
+        return TimetableRepositoryImpl(dao)
     }
 }

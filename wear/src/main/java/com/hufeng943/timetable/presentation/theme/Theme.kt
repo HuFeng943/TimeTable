@@ -8,7 +8,7 @@ import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.dynamicColorScheme
 
 @Composable
-fun TimeTableTheme(
+fun TimetableTheme(
     content: @Composable () -> Unit
 ) {
     val context = LocalContext.current

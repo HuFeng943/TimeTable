@@ -21,11 +21,11 @@ import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.contract.TableAction
 import com.hufeng943.timetable.presentation.ui.LocalNavController
 import com.hufeng943.timetable.presentation.ui.NavRoutes
-import com.hufeng943.timetable.shared.model.TimeTable
+import com.hufeng943.timetable.shared.model.Timetable
 
 @Composable
-fun EditTimeTable(
-    timeTables: List<TimeTable>, onAction: (TableAction) -> Unit
+fun EditTimetable(
+    timetables: List<Timetable>, onAction: (TableAction) -> Unit
 ) {
     val navController = LocalNavController.current
     val scrollState = rememberScalingLazyListState()
@@ -48,19 +48,19 @@ fun EditTimeTable(
                         Text(stringResource(R.string.edit_timetable_title))
                     }
                 }
-                if (timeTables.isEmpty()) {
+                if (timetables.isEmpty()) {
                     item {
                         Text(stringResource(R.string.edit_timetable_empty))
                     }
                 } else {
-                    items(timeTables, key = { it.timeTableId }) { timeTable ->
+                    items(timetables, key = { it.timetableId }) { timetable ->
                         TitleCard(// TODO 课表未开始/正进行/已结束状态显示
                             onClick = { /* TODO: 切换当前课表或编辑详情 */ },
-                            title = { Text(timeTable.semesterName) },
+                            title = { Text(timetable.semesterName) },
                             subtitle = {
                                 Text(
                                     text = stringResource(
-                                        R.string.edit_timetable_number, timeTable.allCourses.size
+                                        R.string.edit_timetable_number, timetable.allCourses.size
                                     )
                                 )
                             },

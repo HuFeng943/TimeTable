@@ -35,7 +35,7 @@ import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
 import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.contract.TableAction
-import com.hufeng943.timetable.shared.model.TimeTable
+import com.hufeng943.timetable.shared.model.Timetable
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toJavaLocalDate
@@ -46,8 +46,8 @@ import kotlin.time.Clock
 
 @Suppress("AssignedValueIsNeverRead")
 @Composable
-fun AddTimeTable(
-    existingTables: List<TimeTable>, onAction: (TableAction) -> Unit
+fun AddTimetable(
+    existingTables: List<Timetable>, onAction: (TableAction) -> Unit
 ) {
     val scrollState = rememberScalingLazyListState()
     var pickerType by remember { mutableStateOf<PickerType>(PickerType.Main) }

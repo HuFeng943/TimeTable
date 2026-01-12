@@ -8,15 +8,15 @@ import androidx.room.Query
 import androidx.room.Transaction
 import com.hufeng943.timetable.shared.data.entities.CourseEntity
 import com.hufeng943.timetable.shared.data.entities.TimeSlotEntity
-import com.hufeng943.timetable.shared.data.entities.TimeTableEntity
-import com.hufeng943.timetable.shared.data.relations.TimeTableWithCourses
+import com.hufeng943.timetable.shared.data.entities.TimetableEntity
+import com.hufeng943.timetable.shared.data.relations.TimetableWithCourses
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface TimeTableDao {
+interface TimetableDao {
     // ------插入------
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTimeTable(timeTable: TimeTableEntity): Long
+    suspend fun insertTimetable(timetable: TimetableEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCourse(course: CourseEntity): Long
@@ -26,7 +26,7 @@ interface TimeTableDao {
 
     // ------删除------
     @Delete
-    suspend fun deleteTimeTable(timeTable: TimeTableEntity)
+    suspend fun deleteTimetable(timetable: TimetableEntity)
 
     @Delete
     suspend fun deleteCourse(course: CourseEntity)
@@ -36,7 +36,7 @@ interface TimeTableDao {
 
     // 按 ID 删除
     @Query("DELETE FROM time_tables WHERE id = :id")
-    suspend fun deleteTimeTableById(id: Long)
+    suspend fun deleteTimetableById(id: Long)
 
     @Query("DELETE FROM courses WHERE id = :courseId")
     suspend fun deleteCourseById(courseId: Long)
@@ -49,6 +49,6 @@ interface TimeTableDao {
     // 查询所有课表
     @Transaction
     @Query("SELECT * FROM time_tables")
-    fun getAllTimeTablesWithCourses(): Flow<List<TimeTableWithCourses>>
+    fun getAllTimetablesWithCourses(): Flow<List<TimetableWithCourses>>
 
 }

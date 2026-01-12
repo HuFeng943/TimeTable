@@ -11,15 +11,15 @@ import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import com.hufeng943.timetable.presentation.ui.LocalNavController
 import com.hufeng943.timetable.presentation.ui.NavRoutes
-import com.hufeng943.timetable.shared.model.TimeTable
+import com.hufeng943.timetable.shared.model.Timetable
 
 @Composable
-fun LoadingScreen(timeTables: List<TimeTable>? = null) {
+fun LoadingScreen(timetables: List<Timetable>? = null) {
     val navController = LocalNavController.current
 
-    Log.v("navController2", (timeTables==null).toString())
-    LaunchedEffect(timeTables) {
-        if (timeTables != null) {
+    Log.v("navController2", (timetables == null).toString())
+    LaunchedEffect(timetables) {
+        if (timetables != null) {
             navController.navigate(NavRoutes.MAIN) {
                 popUpTo(NavRoutes.LOADING) { inclusive = true }
                 Log.v("navController", "加载完成，跳转！")

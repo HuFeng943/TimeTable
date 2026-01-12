@@ -1,24 +1,24 @@
 package com.hufeng943.timetable.shared.data.repository
 
-import com.hufeng943.timetable.shared.data.dao.TimeTableDao
+import com.hufeng943.timetable.shared.data.dao.TimetableDao
 import com.hufeng943.timetable.shared.data.mappers.toCourseEntity
 import com.hufeng943.timetable.shared.data.mappers.toTimeSlotEntity
-import com.hufeng943.timetable.shared.data.mappers.toTimeTable
-import com.hufeng943.timetable.shared.data.mappers.toTimeTableEntity
+import com.hufeng943.timetable.shared.data.mappers.toTimetable
+import com.hufeng943.timetable.shared.data.mappers.toTimetableEntity
 import com.hufeng943.timetable.shared.model.Course
 import com.hufeng943.timetable.shared.model.TimeSlot
-import com.hufeng943.timetable.shared.model.TimeTable
+import com.hufeng943.timetable.shared.model.Timetable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class TimeTableRepositoryImpl(private val dao: TimeTableDao) : TimeTableRepository {
-    override suspend fun insertTimeTable(timeTable: TimeTable): Long {
-        val timeTableEntity = timeTable.toTimeTableEntity()
-        return dao.insertTimeTable(timeTableEntity)
+class TimetableRepositoryImpl(private val dao: TimetableDao) : TimetableRepository {
+    override suspend fun insertTimetable(timetable: Timetable): Long {
+        val timetableEntity = timetable.toTimetableEntity()
+        return dao.insertTimetable(timetableEntity)
     }
 
-    override suspend fun insertCourse(course: Course, timeTableId: Long): Long {
-        val courseEntity = course.toCourseEntity(timeTableId)
+    override suspend fun insertCourse(course: Course, timetableId: Long): Long {
+        val courseEntity = course.toCourseEntity(timetableId)
         return dao.insertCourse(courseEntity)
     }
 
@@ -27,8 +27,8 @@ class TimeTableRepositoryImpl(private val dao: TimeTableDao) : TimeTableReposito
         return dao.insertTimeSlot(timeSlotEntity)
     }
 
-    override suspend fun deleteTimeTable(timeTableId: Long) {
-        dao.deleteTimeTableById(timeTableId)
+    override suspend fun deleteTimetable(timetableId: Long) {
+        dao.deleteTimetableById(timetableId)
     }
 
     override suspend fun deleteCourse(courseId: Long) {
@@ -39,11 +39,11 @@ class TimeTableRepositoryImpl(private val dao: TimeTableDao) : TimeTableReposito
         dao.deleteTimeSlotById(timeSlotId)
     }
 
-    override fun getAllTimeTables(): Flow<List<TimeTable>> {
-        return dao.getAllTimeTablesWithCourses()
+    override fun getAllTimetables(): Flow<List<Timetable>> {
+        return dao.getAllTimetablesWithCourses()
             .map { relationsList ->
                 relationsList.map { relation ->
-                    relation.toTimeTable()
+                    relation.toTimetable()
                 }
             }
     }

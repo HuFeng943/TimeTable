@@ -1,7 +1,7 @@
 package com.hufeng943.timetable.shared.ui.mappers
 
 import com.hufeng943.timetable.shared.model.TimeSlot
-import com.hufeng943.timetable.shared.model.TimeTable
+import com.hufeng943.timetable.shared.model.Timetable
 import com.hufeng943.timetable.shared.ui.CourseUi
 import com.hufeng943.timetable.shared.ui.CourseWithSlotId
 
@@ -9,12 +9,12 @@ import com.hufeng943.timetable.shared.ui.CourseWithSlotId
  * 通过timeSlotId查找对应的对象
  * @return TimeSlot 查找失败则返回 null
  */
-fun TimeTable.findTimeSlotById(timeSlotId: Long): TimeSlot? = this.timeSlotsMap[timeSlotId]
+fun Timetable.findTimeSlotById(timeSlotId: Long): TimeSlot? = this.timeSlotsMap[timeSlotId]
 /**
  * 通过CourseWithSlotId反查CourseUi
  * @return CourseUi 查找失败则返回 null
  */
-fun TimeTable.toCourseUi(courseWithSlotId: CourseWithSlotId): CourseUi? {
+fun Timetable.toCourseUi(courseWithSlotId: CourseWithSlotId): CourseUi? {
     val course = this.courseMap[courseWithSlotId.courseId]
     val timeSlot = this.timeSlotsMap[courseWithSlotId.timeSlotId]
 

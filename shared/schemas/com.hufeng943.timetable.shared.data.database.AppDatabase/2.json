@@ -53,7 +53,7 @@
       },
       {
         "tableName": "courses",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timeTableId` INTEGER NOT NULL, `name` TEXT NOT NULL, `location` TEXT, `color` INTEGER NOT NULL, `teacher` TEXT, FOREIGN KEY(`timeTableId`) REFERENCES `time_tables`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timetableId` INTEGER NOT NULL, `name` TEXT NOT NULL, `location` TEXT, `color` INTEGER NOT NULL, `teacher` TEXT, FOREIGN KEY(`timetableId`) REFERENCES `time_tables`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -62,8 +62,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "timeTableId",
-            "columnName": "timeTableId",
+            "fieldPath": "timetableId",
+            "columnName": "timetableId",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -98,13 +98,13 @@
         },
         "indices": [
           {
-            "name": "index_courses_timeTableId",
+            "name": "index_courses_timetableId",
             "unique": false,
             "columnNames": [
-              "timeTableId"
+              "timetableId"
             ],
             "orders": [],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_courses_timeTableId` ON `${TABLE_NAME}` (`timeTableId`)"
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_courses_timetableId` ON `${TABLE_NAME}` (`timetableId`)"
           }
         ],
         "foreignKeys": [
@@ -113,7 +113,7 @@
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
-              "timeTableId"
+              "timetableId"
             ],
             "referencedColumns": [
               "id"

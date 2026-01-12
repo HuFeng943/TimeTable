@@ -11,46 +11,46 @@ import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.hufeng943.timetable.presentation.ui.screens.detail.CourseDetailScreen
-import com.hufeng943.timetable.presentation.ui.screens.edit.AddTimeTable
-import com.hufeng943.timetable.presentation.ui.screens.edit.EditTimeTable
+import com.hufeng943.timetable.presentation.ui.screens.edit.AddTimetable
+import com.hufeng943.timetable.presentation.ui.screens.edit.EditTimetable
 import com.hufeng943.timetable.presentation.ui.screens.home.HomeScreen
 import com.hufeng943.timetable.presentation.ui.screens.loading.LoadingScreen
-import com.hufeng943.timetable.presentation.viewmodel.TimeTableViewModel
-import com.hufeng943.timetable.shared.model.TimeTable
+import com.hufeng943.timetable.presentation.viewmodel.TimetableViewModel
+import com.hufeng943.timetable.shared.model.Timetable
 import com.hufeng943.timetable.shared.ui.CourseWithSlotId
 
 @Composable
-fun AppNavHost(viewModel: TimeTableViewModel = hiltViewModel()) {
+fun AppNavHost(viewModel: TimetableViewModel = hiltViewModel()) {
     val navController = rememberSwipeDismissableNavController()
 
     // 订阅 Flow -> Compose state
-    val timeTables by viewModel.timeTables.collectAsState()
+    val timetables by viewModel.timetables.collectAsState()
     CompositionLocalProvider(LocalNavController provides navController) {
         SwipeDismissableNavHost(
             navController = navController, startDestination = NavRoutes.LOADING
         ) {
 
             composable(NavRoutes.LOADING) {
-                LoadingScreen(timeTables)
+                LoadingScreen(timetables)
             }
             composable(NavRoutes.ERROR) {
                 Log.v("navController", NavRoutes.ERROR)
                 TODO()// TODO 单独一个异常界面 可以传递的不同的相关的错误信息
             }
             composable(NavRoutes.MAIN) {
-                Log.v("navController1", (timeTables == null).toString())
-                RequireTable(timeTables) { tables ->
+                Log.v("navController1", (timetables == null).toString())
+                RequireTable(timetables) { tables ->
                     HomeScreen(tables)
                 }
             }
             composable(NavRoutes.COURSE_DETAIL) { backStackEntry ->
-                RequireTable(timeTables) { tables ->
+                RequireTable(timetables) { tables ->
                     val courseId = backStackEntry.longArg("courseId")
                     val timeSlotId = backStackEntry.longArg("timeSlotId")
                     if (courseId != null && timeSlotId != null) {
-                        val timeTable: TimeTable? = tables.firstOrNull()
+                        val timetable: Timetable? = tables.firstOrNull()
                         CourseDetailScreen(
-                            timeTable, CourseWithSlotId(courseId, timeSlotId)
+                            timetable, CourseWithSlotId(courseId, timeSlotId)
                         )
                     } else {
                         navController.navigate(NavRoutes.ERROR)
@@ -58,15 +58,15 @@ fun AppNavHost(viewModel: TimeTableViewModel = hiltViewModel()) {
                 }
             }
             composable(NavRoutes.EDIT_COURSE) {
-                RequireTable(timeTables) { tables ->
-                    EditTimeTable(
+                RequireTable(timetables) { tables ->
+                    EditTimetable(
                         tables, onAction = viewModel::onAction
                     )
                 }
             }
             composable(NavRoutes.ADD_COURSE) {
-                RequireTable(timeTables) { tables ->
-                    AddTimeTable(
+                RequireTable(timetables) { tables ->
+                    AddTimetable(
                         tables, onAction = viewModel::onAction
                     )
                 }
@@ -82,9 +82,9 @@ fun NavBackStackEntry.longArg(key: String): Long? = arguments?.getString(key)?.t
 // 封装了重复多次的判断
 @Composable
 fun RequireTable(
-    timeTables: List<TimeTable>?, content: @Composable (List<TimeTable>) -> Unit
+    timetables: List<Timetable>?, content: @Composable (List<Timetable>) -> Unit
 ) {
-    timeTables?.let { tables ->
+    timetables?.let { tables ->
         content(tables)
     } ?: LoadingScreen()
 }

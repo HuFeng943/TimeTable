@@ -18,15 +18,15 @@ import androidx.wear.compose.material3.Text
 import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.LocalNavController
 import com.hufeng943.timetable.presentation.ui.NavRoutes.courseDetail
-import com.hufeng943.timetable.presentation.ui.components.TimeTableCard
-import com.hufeng943.timetable.shared.model.TimeTable
+import com.hufeng943.timetable.presentation.ui.components.TimetableCard
+import com.hufeng943.timetable.shared.model.Timetable
 import com.hufeng943.timetable.shared.ui.CourseWithSlotId
 import com.hufeng943.timetable.shared.ui.mappers.toCourseUi
 
 
 @Composable
 fun TimetablePager(
-    timeTable: TimeTable,
+    timetable: Timetable,
     coursesIdList: List<CourseWithSlotId>,
     title: String,
     targetIndex: Int = 0
@@ -48,7 +48,7 @@ fun TimetablePager(
         else -> {
             val scrollState = rememberScalingLazyListState(initialCenterItemIndex = targetIndex)
             val sortedCourses = remember(coursesIdList) {
-                coursesIdList.sortedWith(compareBy { timeTable.toCourseUi(it)!!.timeSlot.startTime })
+                coursesIdList.sortedWith(compareBy { timetable.toCourseUi(it)!!.timeSlot.startTime })
             }
 
             ScreenScaffold(scrollState = scrollState) {
@@ -69,9 +69,9 @@ fun TimetablePager(
                         key = { _, item -> "${item.courseId}-${item.timeSlotId}" } // 唯一 key
                     ) { dailyOrderIndex, idPair ->
                         val course =
-                            timeTable.toCourseUi(idPair)?.copy(dailyOrder = dailyOrderIndex + 1)
+                            timetable.toCourseUi(idPair)?.copy(dailyOrder = dailyOrderIndex + 1)
                         if (course != null) {
-                            TimeTableCard(course) {
+                            TimetableCard(course) {
                                 // 传递两ID
                                 navController.navigate(
                                     courseDetail(

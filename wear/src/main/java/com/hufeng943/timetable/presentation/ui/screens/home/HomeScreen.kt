@@ -13,13 +13,13 @@ import androidx.wear.compose.foundation.pager.rememberPagerState
 import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.HorizontalPageIndicator
 import com.hufeng943.timetable.R
-import com.hufeng943.timetable.shared.model.TimeTable
+import com.hufeng943.timetable.shared.model.Timetable
 import com.hufeng943.timetable.shared.ui.mappers.toCourseWithSlots
 
 @Composable
-fun HomeScreen(timeTables: List<TimeTable>) {
+fun HomeScreen(timetables: List<Timetable>) {
     // TODO 可选择课表
-    val timeTable: TimeTable? = timeTables.firstOrNull()
+    val timetable: Timetable? = timetables.firstOrNull()
     val pagerState = rememberPagerState(pageCount = { 2 })
     Box(modifier = Modifier.fillMaxSize()) {
         HorizontalPager(
@@ -28,10 +28,10 @@ fun HomeScreen(timeTables: List<TimeTable>) {
             when (page) {
                 0 -> {
                     AppScaffold {
-                        if (timeTable != null) {
+                        if (timetable != null) {
                             TimetablePager(
-                                timeTable = timeTable, // 传递 TimeTable
-                                coursesIdList = timeTable.toCourseWithSlots(),
+                                timetable = timetable, // 传递 Timetable
+                                coursesIdList = timetable.toCourseWithSlots(),
                                 title = stringResource(R.string.home_title)
                             )
                         } else {

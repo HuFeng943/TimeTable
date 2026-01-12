@@ -1,8 +1,8 @@
 package com.hufeng943.timetable.presentation.contract
 
-import com.hufeng943.timetable.shared.model.TimeTable
+import com.hufeng943.timetable.shared.model.Timetable
 
 sealed class TableAction {
-    data class Add(val table: TimeTable) : TableAction()
+    data class Add(val table: Timetable) : TableAction()
     // TODO ......
 }

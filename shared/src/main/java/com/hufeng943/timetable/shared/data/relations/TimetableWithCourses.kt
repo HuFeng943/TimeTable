@@ -3,17 +3,17 @@ package com.hufeng943.timetable.shared.data.relations
 import androidx.room.Embedded
 import androidx.room.Relation
 import com.hufeng943.timetable.shared.data.entities.CourseEntity
-import com.hufeng943.timetable.shared.data.entities.TimeTableEntity
+import com.hufeng943.timetable.shared.data.entities.TimetableEntity
 
-data class TimeTableWithCourses(
-    @Embedded val timeTable: TimeTableEntity,
+data class TimetableWithCourses(
+    @Embedded val timetable: TimetableEntity,
     @Relation(
         // 基于 CourseEntity 的联系
         entity = CourseEntity::class,
-        // TimeTableEntity.id
+        // TimetableEntity.id
         parentColumn = "id",
-        // CourseEntity.timeTableId
-        entityColumn = "timeTableId"
+        // CourseEntity.timetableId
+        entityColumn = "timetableId"
     )
     val courses: List<CourseWithSlots> // 列表类型是内层 Relation Class
 )
