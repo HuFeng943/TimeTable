@@ -9,6 +9,7 @@ import androidx.wear.compose.material3.Text
 
 @Composable
 fun EmptyPager() {
+
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text(text = "没有课表！！！")
     }

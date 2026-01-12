@@ -1,10 +1,7 @@
 package com.hufeng943.timetable.presentation.ui.screens.home
 
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Info
@@ -13,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.items
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
@@ -35,9 +31,13 @@ fun MorePager() {
         MoreMenuItemUi(stringResource(R.string.more_menu_edit_timetable), Icons.Default.Edit) {
             navController.navigate(NavRoutes.EDIT_COURSE)
         },
-        MoreMenuItemUi(stringResource(R.string.more_menu_settings), Icons.Default.Settings) {TODO()},
-        MoreMenuItemUi(stringResource(R.string.more_menu_about), Icons.Default.Info) {TODO()},
+        MoreMenuItemUi(
+            stringResource(R.string.more_menu_settings),
+            Icons.Default.Settings
+        ) { TODO() },
+        MoreMenuItemUi(stringResource(R.string.more_menu_about), Icons.Default.Info) { TODO() },
     )
+
     ScreenScaffold(scrollState = scrollState) {
         ScalingLazyColumn(
             state = scrollState,
@@ -50,16 +50,11 @@ fun MorePager() {
             }
 
             items(menuItems) { item ->
-                Button(
-                    onClick = item.onClick,
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Icon(item.icon,
-                        contentDescription = null,
-                        modifier = Modifier.size(24.dp))
-                    Spacer(Modifier.width(8.dp))
-                    Text(item.label)
-                }
+                Button(onClick = item.onClick, modifier = Modifier.fillMaxWidth(), icon = {
+                    Icon(
+                        imageVector = item.icon, contentDescription = null
+                    )
+                }, label = { Text(item.label) })
             }
         }
     }

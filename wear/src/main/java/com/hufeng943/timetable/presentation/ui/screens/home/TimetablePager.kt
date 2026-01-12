@@ -1,6 +1,5 @@
 package com.hufeng943.timetable.presentation.ui.screens.home
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.text.BasicText
@@ -9,10 +8,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.itemsIndexed
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
+import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
@@ -57,13 +56,14 @@ fun TimetablePager(
                 ScalingLazyColumn(
                     modifier = modifier.fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
                     state = scrollState
                 ) {
                     item {
-                        Text(
-                            text = title, style = MaterialTheme.typography.titleMedium
-                        )
+                        ListHeader {
+                            Text(
+                                text = title, style = MaterialTheme.typography.titleMedium
+                            )
+                        }
                     }
                     itemsIndexed(
                         items = sortedCourses,
@@ -74,7 +74,12 @@ fun TimetablePager(
                         if (course != null) {
                             TimeTableCard(course) {
                                 // 传递两ID
-                                navController.navigate(courseDetail(idPair.courseId,idPair.timeSlotId))
+                                navController.navigate(
+                                    courseDetail(
+                                        idPair.courseId,
+                                        idPair.timeSlotId
+                                    )
+                                )
                             }
                         }
                     }

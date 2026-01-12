@@ -7,7 +7,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
-import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
@@ -27,54 +26,51 @@ fun AppNavHost(viewModel: TimeTableViewModel = hiltViewModel()) {
     // 订阅 Flow -> Compose state
     val timeTables by viewModel.timeTables.collectAsState()
     CompositionLocalProvider(LocalNavController provides navController) {
-        AppScaffold {
-            SwipeDismissableNavHost(
-                navController = navController, startDestination = NavRoutes.LOADING
-            ) {
+        SwipeDismissableNavHost(
+            navController = navController, startDestination = NavRoutes.LOADING
+        ) {
 
-                composable(NavRoutes.LOADING) {
-                    LoadingScreen(timeTables)
+            composable(NavRoutes.LOADING) {
+                LoadingScreen(timeTables)
+            }
+            composable(NavRoutes.ERROR) {
+                Log.v("navController", NavRoutes.ERROR)
+                TODO()// TODO 单独一个异常界面 可以传递的不同的相关的错误信息
+            }
+            composable(NavRoutes.MAIN) {
+                Log.v("navController1", (timeTables == null).toString())
+                RequireTable(timeTables) { tables ->
+                    HomeScreen(tables)
                 }
-                composable(NavRoutes.ERROR) {
-                    Log.v("navController", NavRoutes.ERROR)
-                    TODO()// TODO 单独一个异常界面 可以传递的不同的相关的错误信息
-                }
-                composable(NavRoutes.MAIN) {
-                    Log.v("navController1", (timeTables == null).toString())
-                    RequireTable(timeTables) { tables ->
-                        HomeScreen(tables)
-                    }
-                }
-                composable(NavRoutes.COURSE_DETAIL) { backStackEntry ->
-                    RequireTable(timeTables) { tables ->
-                        val courseId = backStackEntry.longArg("courseId")
-                        val timeSlotId = backStackEntry.longArg("timeSlotId")
-                        if (courseId != null && timeSlotId != null) {
-                            val timeTable: TimeTable? = tables.firstOrNull()
-                            CourseDetailScreen(
-                                timeTable, CourseWithSlotId(courseId, timeSlotId)
-                            )
-                        } else {
-                            navController.navigate(NavRoutes.ERROR)
-                        }
-                    }
-                }
-                composable(NavRoutes.EDIT_COURSE) {
-                    RequireTable(timeTables) { tables ->
-                        EditTimeTable(
-                            tables,
-                            onAction = viewModel::onAction
+            }
+            composable(NavRoutes.COURSE_DETAIL) { backStackEntry ->
+                RequireTable(timeTables) { tables ->
+                    val courseId = backStackEntry.longArg("courseId")
+                    val timeSlotId = backStackEntry.longArg("timeSlotId")
+                    if (courseId != null && timeSlotId != null) {
+                        val timeTable: TimeTable? = tables.firstOrNull()
+                        CourseDetailScreen(
+                            timeTable, CourseWithSlotId(courseId, timeSlotId)
                         )
+                    } else {
+                        navController.navigate(NavRoutes.ERROR)
                     }
                 }
-                composable(NavRoutes.ADD_COURSE) {
-                    RequireTable(timeTables) { tables ->
-                        AddTimeTable(
-                            tables,
-                            onAction = viewModel::onAction
-                        )
-                    }
+            }
+            composable(NavRoutes.EDIT_COURSE) {
+                RequireTable(timeTables) { tables ->
+                    EditTimeTable(
+                        tables, onAction = viewModel::onAction
+                    )
                 }
+            }
+            composable(NavRoutes.ADD_COURSE) {
+                RequireTable(timeTables) { tables ->
+                    AddTimeTable(
+                        tables, onAction = viewModel::onAction
+                    )
+                }
+
             }
         }
     }

@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import com.hufeng943.timetable.presentation.ui.LocalNavController
 import com.hufeng943.timetable.presentation.ui.NavRoutes
@@ -25,7 +26,8 @@ fun LoadingScreen(timeTables: List<TimeTable>? = null) {
             }
         }
         }
+    ScreenScaffold{
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text("课程加载中…")
-    }
+    }}
 }
