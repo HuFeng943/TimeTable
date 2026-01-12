@@ -32,7 +32,7 @@ fun HomeScreen(timeTables: List<TimeTable>) {
                             TimetablePager(
                                 timeTable = timeTable, // 传递 TimeTable
                                 coursesIdList = timeTable.toCourseWithSlots(),
-                                title = stringResource(R.string.home_title_today)
+                                title = stringResource(R.string.home_title)
                             )
                         } else {
                             EmptyPager()

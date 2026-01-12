@@ -28,7 +28,7 @@ fun MorePager() {
     val navController = LocalNavController.current
 
     val menuItems = listOf(
-        MoreMenuItemUi(stringResource(R.string.more_menu_edit_timetable), Icons.Default.Edit) {
+        MoreMenuItemUi(stringResource(R.string.more_menu_edit), Icons.Default.Edit) {
             navController.navigate(NavRoutes.EDIT_COURSE)
         },
         MoreMenuItemUi(
@@ -45,7 +45,7 @@ fun MorePager() {
         ) {
             item {
                 ListHeader {
-                    Text(stringResource(R.string.more_header_title))
+                    Text(stringResource(R.string.more_title))
                 }
             }
 

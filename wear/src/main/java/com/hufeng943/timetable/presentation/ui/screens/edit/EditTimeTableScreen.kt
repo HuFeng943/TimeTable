@@ -14,7 +14,6 @@ import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.EdgeButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListHeader
-import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
@@ -23,8 +22,6 @@ import com.hufeng943.timetable.presentation.contract.TableAction
 import com.hufeng943.timetable.presentation.ui.LocalNavController
 import com.hufeng943.timetable.presentation.ui.NavRoutes
 import com.hufeng943.timetable.shared.model.TimeTable
-import kotlinx.datetime.LocalDate
-import kotlin.time.Clock
 
 @Composable
 fun EditTimeTable(
@@ -37,7 +34,8 @@ fun EditTimeTable(
             EdgeButton(
                 onClick = { navController.navigate(NavRoutes.ADD_COURSE) }) {
                 Icon(
-                    imageVector = Icons.Default.Add, contentDescription = "新增课表"
+                    imageVector = Icons.Default.Add,
+                    contentDescription = stringResource(R.string.edit_timetable_add)
                 )
             }
         }) {
@@ -47,35 +45,29 @@ fun EditTimeTable(
             ) {
                 item {
                     ListHeader {
-                        Text(stringResource(R.string.edit_course_header_title))
+                        Text(stringResource(R.string.edit_timetable_title))
                     }
                 }
                 if (timeTables.isEmpty()) {
                     item {
-                        Text("还没有课表")
+                        Text(stringResource(R.string.edit_timetable_empty))
                     }
                 } else {
                     items(timeTables, key = { it.timeTableId }) { timeTable ->
-                        TitleCard(
+                        TitleCard(// TODO 课表未开始/正进行/已结束状态显示
                             onClick = { /* TODO: 切换当前课表或编辑详情 */ },
                             title = { Text(timeTable.semesterName) },
                             subtitle = {
                                 Text(
-                                    text = "共 ${timeTable.allCourses.size} 门课程",
-                                    style = MaterialTheme.typography.labelSmall
+                                    text = stringResource(
+                                        R.string.edit_timetable_number, timeTable.allCourses.size
+                                    )
                                 )
                             },
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
                 }
-                TimeTable(// TODO 测试
-                    semesterName = "2026 春季学期",
-                    createdAt = Clock.System.now(),
-                    semesterStart = LocalDate(2026, 2, 24),
-                    color = 0xFF669DF6,
-                    allCourses = emptyList()
-                )
             }
         }
     }
