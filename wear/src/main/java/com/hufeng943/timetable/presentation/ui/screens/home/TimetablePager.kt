@@ -28,7 +28,6 @@ import com.hufeng943.timetable.shared.ui.mappers.toCourseUi
 fun TimetablePager(
     timeTable: TimeTable,
     coursesIdList: List<CourseWithSlotId>,
-    modifier: Modifier = Modifier,
     title: String,
     targetIndex: Int = 0
 ) {
@@ -54,7 +53,7 @@ fun TimetablePager(
 
             ScreenScaffold(scrollState = scrollState) {
                 ScalingLazyColumn(
-                    modifier = modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     state = scrollState
                 ) {

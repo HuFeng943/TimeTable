@@ -8,10 +8,8 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
-import androidx.wear.compose.foundation.lazy.items
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.Button
 import androidx.wear.compose.material3.Icon
@@ -27,17 +25,6 @@ fun MorePager() {
     val scrollState = rememberScalingLazyListState()
     val navController = LocalNavController.current
 
-    val menuItems = listOf(
-        MoreMenuItemUi(stringResource(R.string.more_menu_edit), Icons.Default.Edit) {
-            navController.navigate(NavRoutes.EDIT_COURSE)
-        },
-        MoreMenuItemUi(
-            stringResource(R.string.more_menu_settings),
-            Icons.Default.Settings
-        ) { TODO() },
-        MoreMenuItemUi(stringResource(R.string.more_menu_about), Icons.Default.Info) { TODO() },
-    )
-
     ScreenScaffold(scrollState = scrollState) {
         ScalingLazyColumn(
             state = scrollState,
@@ -49,17 +36,47 @@ fun MorePager() {
                 }
             }
 
-            items(menuItems) { item ->
-                Button(onClick = item.onClick, modifier = Modifier.fillMaxWidth(), icon = {
-                    Icon(
-                        imageVector = item.icon, contentDescription = null
-                    )
-                }, label = { Text(item.label) })
+            // 1. 编辑课表
+            item {
+                Button(
+                    onClick = { navController.navigate(NavRoutes.EDIT_COURSE) },
+                    modifier = Modifier.fillMaxWidth(),
+                    icon = {
+                        Icon(imageVector = Icons.Default.Edit, contentDescription = null)
+                    },
+                    label = {
+                        Text(stringResource(R.string.more_menu_edit))
+                    }
+                )
+            }
+
+            // 2. 设置
+            item {
+                Button(
+                    onClick = { /* TODO */ },
+                    modifier = Modifier.fillMaxWidth(),
+                    icon = {
+                        Icon(imageVector = Icons.Default.Settings, contentDescription = null)
+                    },
+                    label = {
+                        Text(stringResource(R.string.more_menu_settings))
+                    }
+                )
+            }
+
+            // 3. 关于
+            item {
+                Button(
+                    onClick = { /* TODO */ },
+                    modifier = Modifier.fillMaxWidth(),
+                    icon = {
+                        Icon(imageVector = Icons.Default.Info, contentDescription = null)
+                    },
+                    label = {
+                        Text(stringResource(R.string.more_menu_about))
+                    }
+                )
             }
         }
     }
 }
-
-internal data class MoreMenuItemUi(
-    val label: String, val icon: ImageVector, val onClick: () -> Unit
-)
