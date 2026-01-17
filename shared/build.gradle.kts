@@ -9,12 +9,12 @@ java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
 }
+
 kotlin {
     compilerOptions {
         jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
         freeCompilerArgs.add("-opt-in=kotlin.time.ExperimentalTime")
     }
-    sourceSets.getByName("main").kotlin.srcDir("build/generated/ksp/main/kotlin")
 }
 
 ksp {

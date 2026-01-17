@@ -1,33 +1,23 @@
+import com.android.build.api.dsl.ApplicationExtension
+
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt.android)
 }
 
-android {
+configure<ApplicationExtension> {
     namespace = "com.hufeng943.timetable"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.hufeng943.timetable"
         minSdk = 28
         targetSdk = 36
-        renderscriptSupportModeEnabled = true
-        // MM: Major (2 digits, 00-99)
-        // mm: Minor (2 digits, 00-99)
-        // pp: Patch (2 digits, 00-99)
-        // rr: Release/Alpha/Beta Iteration (2 digits, 01-99)
-        // versionCode = MMmmpprr
         versionCode = 2
         versionName = "0.0.0-alpha02"
 
-        ndk {
-            abiFilters += listOf("armeabi-v7a", "x86", "arm64-v8a", "x86_64")
-        }
     }
 
     splits {
@@ -39,11 +29,11 @@ android {
             isUniversalApk = true
         }
     }
+
     buildTypes {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
-            // isDebuggable = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
@@ -55,15 +45,17 @@ android {
     buildFeatures {
         compose = true
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-        compilerOptions {
-            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
-            freeCompilerArgs.add("-opt-in=kotlin.time.ExperimentalTime")
-        }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+        freeCompilerArgs.add("-opt-in=kotlin.time.ExperimentalTime")
     }
 }
 
