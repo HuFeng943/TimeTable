@@ -65,9 +65,9 @@ fun AppNavHost(viewModel: TimetableViewModel = hiltViewModel()) {
                 }
             }
             composable(NavRoutes.ADD_COURSE) {
-                RequireTable(timetables) { tables ->
+                RequireTable(timetables) {
                     AddTimetable(
-                        tables, onAction = viewModel::onAction
+                        onAction = viewModel::onAction
                     )
                 }
 

@@ -4,9 +4,15 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
@@ -18,7 +24,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.toColorLong
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -35,6 +45,7 @@ import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
 import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.contract.TableAction
+import com.hufeng943.timetable.presentation.ui.LocalNavController
 import com.hufeng943.timetable.shared.model.Timetable
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -47,15 +58,32 @@ import kotlin.time.Clock
 @Suppress("AssignedValueIsNeverRead")
 @Composable
 fun AddTimetable(
-    existingTables: List<Timetable>, onAction: (TableAction) -> Unit
+    onAction: (TableAction) -> Unit
 ) {
     val scrollState = rememberScalingLazyListState()
     var pickerType by remember { mutableStateOf<PickerType>(PickerType.Main) }
+    val navController = LocalNavController.current
+    val haptic = LocalHapticFeedback.current
+    val colorList = listOf(
+        0xFFE57373,
+        0xFFF06292,
+        0xFFBA68C8,
+        0xFF9575CD,
+        0xFF7986CB,
+        0xFF64B5F6,
+        0xFF4FC3F7,
+        0xFF4DD0E1,
+        0xFF4DB6AC,
+        0xFF81C784,
+        0xFFAED581,
+        0xFFFFB74D
+    ).map { Color(it) }
 
     val toDay = Clock.System.todayIn(TimeZone.currentSystemDefault())
     var semesterStartDate by remember { mutableStateOf(toDay) }
     var semesterEndDate: LocalDate? by remember { mutableStateOf(null) }
     var semesterName by remember { mutableStateOf("哈吉米") }
+    var semesterColor by remember { mutableStateOf(Color(0xFFE57373)) }
 
     Crossfade(
         targetState = pickerType, animationSpec = tween(durationMillis = 350)
@@ -64,7 +92,17 @@ fun AddTimetable(
             PickerType.Main -> {
                 AppScaffold {
                     ScreenScaffold(scrollState = scrollState, edgeButton = {
-                        EdgeButton(onClick = { /* 执行保存逻辑 */ }) {
+                        EdgeButton(onClick = {
+                            val newTable = Timetable(
+                                semesterName = semesterName,
+                                createdAt = Clock.System.now(),
+                                semesterStart = semesterStartDate,
+                                semesterEnd = semesterEndDate,
+                                color = semesterColor.toColorLong()
+                            )
+                            onAction(TableAction.Add(newTable))
+                            navController.popBackStack()
+                        }) {
                             Icon(
                                 Icons.Default.Check,
                                 contentDescription = stringResource(R.string.check)
@@ -138,10 +176,20 @@ fun AddTimetable(
                             }
                             item {// 颜色
                                 TitleCard(
-                                    onClick = { /* 跳转 */ },
+                                    onClick = { pickerType = PickerType.Color },
                                     title = { Text(stringResource(R.string.edit_timetable_color)) },
                                 ) {
-                                    Text("哈吉米", style = MaterialTheme.typography.labelLarge)
+                                    Spacer(modifier = Modifier.height(6.dp))
+                                    Box(// 圆形效果
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .size(
+                                                40.dp
+                                            )
+                                            .background(
+                                                semesterColor, MaterialTheme.shapes.medium
+                                            )
+                                    )
                                 }
                             }
                         }
@@ -178,7 +226,7 @@ fun AddTimetable(
             }
 
             PickerType.SemesterName -> {
-                BackHandler {}// 禁止返回
+                BackHandler { pickerType = PickerType.Main }
                 val scrollState = rememberScalingLazyListState()
                 // 状态管理
                 var textValue by remember { mutableStateOf(semesterName) }
@@ -199,9 +247,7 @@ fun AddTimetable(
                     ) {
                         item {
                             ListHeader {
-                                Text(
-                                    text = "输入课表名称",
-                                )
+                                Text(text = "输入课表名称")
                             }
                         }
                         item {
@@ -232,7 +278,43 @@ fun AddTimetable(
 
             PickerType.Color -> {
                 BackHandler { pickerType = PickerType.Main }
-                // TODO 颜色选择界面
+                val scrollStateColor = rememberScalingLazyListState()
+
+
+                ScreenScaffold(scrollState = scrollStateColor) {
+                    ScalingLazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        state = scrollStateColor,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        item {
+                            ListHeader { Text("选择颜色") }
+                        }
+
+                        // 颜色分组 每行 3 个
+                        val rows = colorList.chunked(3)
+                        items(rows.size) { rowIndex ->
+                            Row(
+                                modifier = Modifier.padding(vertical = 4.dp)
+                            ) {
+                                rows[rowIndex].forEach { color ->
+                                    Box(// 圆形按钮效果
+                                        modifier = Modifier
+                                            .padding(horizontal = 6.dp)
+                                            .size(
+                                                48.dp
+                                            )
+                                            .background(color, CircleShape)
+                                            .clickable {
+                                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)// 模拟按钮按下震动
+                                                semesterColor = color
+                                                pickerType = PickerType.Main
+                                            })
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
